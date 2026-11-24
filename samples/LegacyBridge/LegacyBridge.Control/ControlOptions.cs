@@ -1,5 +1,6 @@
 namespace LegacyBridge.Control;
 
+/// <summary>CLI options for the sample: data directory and reset flag.</summary>
 public sealed record ControlOptions(string DataDirectory, bool Reset)
 {
     public string LegacyDbPath => Path.Combine(DataDirectory, "legacy.db");

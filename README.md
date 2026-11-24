@@ -100,6 +100,18 @@ See [templates/pipelinekit-job/README.md](templates/pipelinekit-job/README.md).
 The `publish` workflow publishes the packages when a `v*` tag is pushed.
 See [docs/PUBLISHING.md](docs/PUBLISHING.md) for the feed URL and credentials.
 
+## Documentation
+
+| Document | Content |
+|---|---|
+| [docs/README.md](docs/README.md) | Documentation index |
+| [docs/architecture.md](docs/architecture.md) | Package map, runtime flow, checkpoint semantics, outbox, agent isolation |
+| [docs/code-guide.md](docs/code-guide.md) | Reading order, contracts, how to add a source, sink, rule or adapter |
+| [docs/PUBLISHING.md](docs/PUBLISHING.md) | Release process, GitHub Packages, template installation |
+| [docs/adr](docs/adr/README.md) | Architecture decision records |
+| [samples/LegacyBridge/README.md](samples/LegacyBridge/README.md) | End-to-end sample walkthrough |
+| [templates/pipelinekit-job/README.md](templates/pipelinekit-job/README.md) | Generated job template |
+
 ## Status
 
 Version `0.4.0`. The API may change before `1.0.0`.

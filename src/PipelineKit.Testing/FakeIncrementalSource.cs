@@ -8,9 +8,14 @@ public sealed class FakeIncrementalSource : IIncrementalSource
 {
     private readonly IReadOnlyList<SourceRow> _rows;
 
+    /// <summary>Creates a source over a fixed set of rows.</summary>
     public FakeIncrementalSource(IEnumerable<SourceRow> rows) =>
         _rows = rows?.ToArray() ?? throw new ArgumentNullException(nameof(rows));
 
+    /// <summary>
+    /// Yields rows inside the window. A timestamp window is the primary filter;
+    /// the key is only used when there is no timestamp.
+    /// </summary>
     public async IAsyncEnumerable<SourceRow> ReadAsync(
         ExtractionWindow window,
         [EnumeratorCancellation] CancellationToken ct = default)

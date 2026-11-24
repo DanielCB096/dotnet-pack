@@ -3,6 +3,19 @@ using PipelineKit.Incremental.Sqlite;
 using PipelineKit.Quality;
 using PipelineKit.Telemetry;
 
+/*
+ * Generated PipelineKit job.
+ *
+ * Flow:
+ *   1. Open/create the SQLite checkpoint database.
+ *   2. Run one incremental batch with a key watermark.
+ *   3. Send invalid rows to quarantine.
+ *   4. Emit a PipelineScope for traces and metrics.
+ *
+ * Replace DemoSource and DemoSink with your real source and destination.
+ * For mutable rows, use IncrementalStrategy.TimestampAndKey with an overlap.
+ */
+
 var dataDirectory = Environment.GetEnvironmentVariable("PIPELINEKIT_DATA")
     ?? Path.Combine(AppContext.BaseDirectory, "data");
 

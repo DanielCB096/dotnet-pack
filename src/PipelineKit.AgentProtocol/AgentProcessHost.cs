@@ -8,6 +8,8 @@ namespace PipelineKit.AgentProtocol;
 
 /// <summary>
 /// Runs an isolated agent process, enforces a timeout and reads its result file.
+/// The host writes request.json, starts the child, reads progress and result,
+/// and never loads the legacy driver itself.
 /// </summary>
 public sealed class AgentProcessHost
 {
@@ -36,6 +38,10 @@ public sealed class AgentProcessHost
         _leadingArguments = leadingArguments;
     }
 
+    /// <summary>
+    /// Starts the agent, waits for completion or timeout, kills the process tree
+    /// on timeout and returns the result file or a stable failure code.
+    /// </summary>
     public async Task<AgentResult> RunAsync(AgentRequest request, CancellationToken ct = default)
     {
         if (request is null)

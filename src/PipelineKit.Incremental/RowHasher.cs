@@ -7,6 +7,10 @@ namespace PipelineKit.Incremental;
 /// <summary>Stable row hash used to detect real changes and avoid empty updates.</summary>
 public static class RowHasher
 {
+    /// <summary>
+    /// Computes a stable SHA-256 hash over the ordered key/value pairs. Used
+    /// to detect real changes and skip empty updates.
+    /// </summary>
     public static string Compute(IReadOnlyDictionary<string, object?> values)
     {
         ArgumentNullException.ThrowIfNull(values);

@@ -54,6 +54,7 @@ public sealed class SqliteBatchSink : IBatchSink
         {
             extracted++;
 
+            // 1. Quality first: invalid rows never reach staging or the DW.
             var quality = await _evaluator
                 .EvaluateAsync(
                     row.Values,
@@ -84,6 +85,7 @@ public sealed class SqliteBatchSink : IBatchSink
                 DateTimeStyles.RoundtripKind);
             var rowHash = RowHasher.Compute(row.Values);
 
+            // 2. Hash comparison avoids rewriting unchanged rows.
             var existingHash = GetExistingHash(connection, transaction, orderId);
             if (string.Equals(existingHash, rowHash, StringComparison.Ordinal))
             {
@@ -91,6 +93,8 @@ public sealed class SqliteBatchSink : IBatchSink
             }
             else
             {
+                // 3. Staging keeps the raw shape; the dimensional table is the
+                //    consumption layer for BI.
                 UpsertStaging(connection, transaction, context, row.Values, rowHash, now);
                 UpsertDimensional(connection, transaction, context, row.Values, rowHash, now);
                 written++;
@@ -111,6 +115,9 @@ public sealed class SqliteBatchSink : IBatchSink
         }
 
         var finished = _timeProvider.GetUtcNow();
+
+        // 4. Batch record and outbox event are written in the same transaction
+        //    as the data. This is the transactional outbox guarantee.
         InsertBatch(connection, transaction, context, extracted, written, rejected, finished);
         InsertOutbox(connection, transaction, context, extracted, written, rejected, finished);
 

@@ -7,6 +7,7 @@ public static class PipelineKitCheckpointModelBuilderExtensions
 {
     public const string DefaultTableName = "pipeline_checkpoints";
 
+    /// <summary>Adds the checkpoint entity to the model, using the given table name.</summary>
     public static ModelBuilder AddPipelineKitCheckpoints(
         this ModelBuilder modelBuilder,
         string tableName = DefaultTableName)

@@ -14,6 +14,10 @@ public sealed class QualityEvaluator
         _quarantine = quarantine;
     }
 
+    /// <summary>
+    /// Runs every rule. Invalid rows are optionally written to the quarantine
+    /// store once per issue.
+    /// </summary>
     public async Task<QualityResult> EvaluateAsync(
         IReadOnlyDictionary<string, object?> row,
         QuarantineContext context,

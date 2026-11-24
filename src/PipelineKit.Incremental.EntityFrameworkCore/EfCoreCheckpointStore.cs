@@ -15,6 +15,7 @@ public sealed class EfCoreCheckpointStore<TContext> : ICheckpointStore
             ?? throw new ArgumentNullException(nameof(contextFactory));
     }
 
+    /// <summary>Reads the last confirmed checkpoint, or null.</summary>
     public async Task<Checkpoint?> GetAsync(
         CheckpointKey key,
         CancellationToken ct = default)
@@ -34,6 +35,7 @@ public sealed class EfCoreCheckpointStore<TContext> : ICheckpointStore
                 record.RowHash);
     }
 
+    /// <summary>Inserts or updates the checkpoint and saves the context.</summary>
     public async Task CommitAsync(
         CheckpointKey key,
         Checkpoint checkpoint,

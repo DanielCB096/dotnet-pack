@@ -3,6 +3,11 @@ namespace PipelineKit.Incremental;
 /// <summary>Calculates the next extraction window from a confirmed checkpoint.</summary>
 public static class ExtractionWindowPlanner
 {
+    /// <summary>
+    /// Calculates the next window. For <see cref="IncrementalStrategy.TimestampAndKey"/>
+    /// the timestamp is the primary filter and the key is a tie-breaker; the
+    /// overlap lets late updates be re-read.
+    /// </summary>
     public static ExtractionWindow Plan(
         IncrementalRequest request,
         Checkpoint? checkpoint,

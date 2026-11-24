@@ -7,6 +7,10 @@ using PipelineKit.Telemetry;
 
 namespace LegacyBridge.Control;
 
+/// <summary>
+/// Wires the sample: legacy database, warehouse schema, checkpoint store,
+/// agent-backed source, quality sink, reconciliation and report.
+/// </summary>
 public sealed class PipelineHost
 {
     private static readonly IncrementalRequest Request = new()

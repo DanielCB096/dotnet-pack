@@ -52,8 +52,10 @@ public sealed class PipelineScope : IDisposable
         PipelineTelemetry.Batches.Add(1, _metricTags);
     }
 
+    /// <summary>Marks the current stage, for example extract, validate or load.</summary>
     public void Stage(string stage) => _activity?.SetTag("pipeline.stage", stage);
 
+    /// <summary>Records how many rows were read from the source.</summary>
     public void RowsExtracted(long count)
     {
         if (_activity is not null)
@@ -64,6 +66,7 @@ public sealed class PipelineScope : IDisposable
         PipelineTelemetry.RowsExtracted.Add(count, _metricTags);
     }
 
+    /// <summary>Records how many rows were rejected by quality rules.</summary>
     public void RowsRejected(long count)
     {
         if (_activity is not null)
@@ -74,6 +77,7 @@ public sealed class PipelineScope : IDisposable
         PipelineTelemetry.RowsRejected.Add(count, _metricTags);
     }
 
+    /// <summary>Marks the batch as failed and registers the exception.</summary>
     public void Fail(Exception exception)
     {
         ArgumentNullException.ThrowIfNull(exception);
@@ -82,6 +86,7 @@ public sealed class PipelineScope : IDisposable
         PipelineTelemetry.Failures.Add(1, _metricTags);
     }
 
+    /// <summary>Records duration and stops the activity. Safe to call twice.</summary>
     public void Dispose()
     {
         if (_finished)

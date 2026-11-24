@@ -19,6 +19,7 @@ public sealed class SqliteCheckpointStore : ICheckpointStore
         _connectionString = connectionString;
     }
 
+    /// <summary>Creates a store from a database file path.</summary>
     public static SqliteCheckpointStore FromPath(string databasePath)
     {
         if (string.IsNullOrWhiteSpace(databasePath))
@@ -29,6 +30,7 @@ public sealed class SqliteCheckpointStore : ICheckpointStore
         return new SqliteCheckpointStore($"Data Source={databasePath}");
     }
 
+    /// <summary>Creates the checkpoints table when it does not exist.</summary>
     public async Task EnsureSchemaAsync(CancellationToken ct = default)
     {
         await using var connection = new SqliteConnection(_connectionString);
@@ -51,6 +53,7 @@ public sealed class SqliteCheckpointStore : ICheckpointStore
         await command.ExecuteNonQueryAsync(ct);
     }
 
+    /// <summary>Reads the last confirmed checkpoint, or null.</summary>
     public async Task<Checkpoint?> GetAsync(CheckpointKey key, CancellationToken ct = default)
     {
         await using var connection = new SqliteConnection(_connectionString);
@@ -85,6 +88,7 @@ public sealed class SqliteCheckpointStore : ICheckpointStore
             reader.IsDBNull(3) ? null : reader.GetString(3));
     }
 
+    /// <summary>Inserts or replaces the checkpoint for the key.</summary>
     public async Task CommitAsync(
         CheckpointKey key,
         Checkpoint checkpoint,

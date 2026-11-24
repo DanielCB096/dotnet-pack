@@ -7,6 +7,22 @@ using PipelineKit.Incremental;
 using PipelineKit.Telemetry;
 using PipelineKit.Telemetry.OpenTelemetry;
 
+/*
+ * LegacyBridge CLI.
+ *
+ * Modes:
+ *   (default)  runs the demo: initial load, no-change run, mutation,
+ *              incremental run, delete reconciliation and outbox relay.
+ *   --agent    internal child-process mode used by AgentProcessHost.
+ *
+ * Options:
+ *   --reset    recreates the legacy and warehouse databases.
+ *   --data     chooses the data directory (default: <app>/data).
+ *
+ * The control process never loads a legacy driver. The agent is a separate
+ * process that reads the request and writes NDJSON, progress and result files.
+ */
+
 if (args.Contains("--agent"))
 {
     return await AgentProgram.RunAsync(args);

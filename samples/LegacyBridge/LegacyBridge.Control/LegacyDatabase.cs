@@ -7,6 +7,7 @@ public sealed class LegacyDatabase(string path)
 {
     public string Path { get; } = path;
 
+    /// <summary>Creates the legacy schema and seed rows when the database is new.</summary>
     public async Task InitializeAsync(bool reset, CancellationToken ct = default)
     {
         Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Path)!);
@@ -101,6 +102,7 @@ public sealed class LegacyDatabase(string path)
             ct);
     }
 
+    /// <summary>Reads every row; used by tests to build a fake source.</summary>
     public async Task<IReadOnlyList<SourceRowData>> ReadAllAsync(CancellationToken ct = default)
     {
         var rows = new List<SourceRowData>();

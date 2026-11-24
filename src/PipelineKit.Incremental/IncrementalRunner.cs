@@ -23,6 +23,15 @@ public sealed class IncrementalRunner
         _logger = logger ?? NullLogger<IncrementalRunner>.Instance;
     }
 
+    /// <summary>
+    /// Runs one incremental batch. The checkpoint is committed only after the
+    /// sink succeeds and consumes the whole stream.
+    /// </summary>
+    /// <param name="request">Pipeline, source, table and strategy.</param>
+    /// <param name="source">Source that honors the calculated window.</param>
+    /// <param name="sink">Idempotent destination.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Counts, duration and whether the checkpoint was committed.</returns>
     public async Task<IncrementalResult> RunAsync(
         IncrementalRequest request,
         IIncrementalSource source,
@@ -40,7 +49,10 @@ public sealed class IncrementalRunner
             request.Table,
             request.Strategy.ToString());
 
+        // 1. Read the last confirmed position.
         var checkpoint = await _store.GetAsync(key, ct).ConfigureAwait(false);
+
+        // 2. Plan the window: timestamp primary, key tie-breaker, overlap.
         var window = ExtractionWindowPlanner.Plan(request, checkpoint, startedAt);
         var batchId = $"{startedAt:yyyyMMddHHmmss}-{Guid.NewGuid():N}";
         var context = new BatchContext(
@@ -51,11 +63,13 @@ public sealed class IncrementalRunner
             window,
             startedAt);
 
+        // 3. Stream rows and track the maximum position seen.
         var tracking = new TrackingAsyncEnumerable(source.ReadAsync(window, ct));
 
         BatchWriteResult writeResult;
         try
         {
+            // 4. The sink writes. If it throws, the checkpoint is not committed.
             writeResult = await sink
                 .WriteAsync(context, tracking.TrackAsync(ct), ct)
                 .ConfigureAwait(false);
@@ -72,6 +86,8 @@ public sealed class IncrementalRunner
                 "The batch sink did not consume the full batch; the checkpoint was not committed.");
         }
 
+        // 5. Keep the maximum position: a late update with a lower key must not
+        //    make the checkpoint go backwards.
         var next = new Checkpoint(
             Max(checkpoint?.LastKey, writeResult.LastKey ?? tracking.LastKey),
             Max(checkpoint?.LastModified, writeResult.LastModified ?? tracking.LastModified),

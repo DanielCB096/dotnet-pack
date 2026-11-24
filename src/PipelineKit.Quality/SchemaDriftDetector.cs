@@ -3,6 +3,7 @@ namespace PipelineKit.Quality;
 /// <summary>Compares an expected schema with the actual source schema.</summary>
 public static class SchemaDriftDetector
 {
+    /// <summary>Compares an expected schema with the actual source schema.</summary>
     public static SchemaDrift Detect(SchemaSnapshot expected, SchemaSnapshot actual)
     {
         ArgumentNullException.ThrowIfNull(expected);

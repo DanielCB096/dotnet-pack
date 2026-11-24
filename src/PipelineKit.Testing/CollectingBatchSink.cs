@@ -5,10 +5,13 @@ namespace PipelineKit.Testing;
 /// <summary>Sink that keeps every row and reports the last position it saw.</summary>
 public sealed class CollectingBatchSink : IBatchSink
 {
+    /// <summary>Rows consumed by the last batch.</summary>
     public List<SourceRow> Rows { get; } = [];
 
+    /// <summary>Context of the last batch.</summary>
     public BatchContext? LastContext { get; private set; }
 
+    /// <summary>Collects the whole stream and returns the last position.</summary>
     public Task<BatchWriteResult> WriteAsync(
         BatchContext context,
         IAsyncEnumerable<SourceRow> rows,
@@ -62,6 +65,7 @@ public sealed class CollectingBatchSink : IBatchSink
 /// <summary>Sink that fails after a number of rows, to test checkpoint rollback.</summary>
 public sealed class FailingBatchSink(int failAfterRows = 0) : IBatchSink
 {
+    /// <summary>Consumes rows until the configured limit, then throws.</summary>
     public async Task<BatchWriteResult> WriteAsync(
         BatchContext context,
         IAsyncEnumerable<SourceRow> rows,

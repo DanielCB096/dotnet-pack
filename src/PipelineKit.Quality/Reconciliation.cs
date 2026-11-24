@@ -3,6 +3,7 @@ namespace PipelineKit.Quality;
 /// <summary>Helpers to compare source and target aggregates.</summary>
 public static class Reconciliation
 {
+    /// <summary>Compares row counts and reports whether they match.</summary>
     public static ReconciliationResult CompareCounts(long sourceCount, long targetCount)
     {
         var match = sourceCount == targetCount;
@@ -15,6 +16,7 @@ public static class Reconciliation
             match ? null : $"Count mismatch: source {sourceCount}, target {targetCount}.");
     }
 
+    /// <summary>Compares sums with an optional tolerance.</summary>
     public static ReconciliationResult CompareSums(
         decimal sourceSum,
         decimal targetSum,

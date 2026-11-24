@@ -5,6 +5,7 @@ namespace PipelineKit.Testing;
 /// <summary>Generates rows with realistic problems for quarantine and drift tests.</summary>
 public static class DirtyDataGenerator
 {
+    /// <summary>Returns a value longer than the declared column length.</summary>
     public static IReadOnlyDictionary<string, object?> OverLength(
         string column,
         int declaredLength,
@@ -14,18 +15,21 @@ public static class DirtyDataGenerator
             [column] = new string('X', declaredLength + extra),
         };
 
+    /// <summary>Returns a row with a null value.</summary>
     public static IReadOnlyDictionary<string, object?> MissingValue(string column) =>
         new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             [column] = null,
         };
 
+    /// <summary>Returns a row with a negative amount.</summary>
     public static IReadOnlyDictionary<string, object?> NegativeAmount(string column) =>
         new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             [column] = -1,
         };
 
+    /// <summary>Builds a deterministic set of rows with sequential keys.</summary>
     public static IReadOnlyList<SourceRow> Rows(
         int count,
         DateTimeOffset? start = null,

@@ -50,9 +50,14 @@ public sealed class PipelineHost
         await _checkpoints.EnsureSchemaAsync(ct);
     }
 
-    public async Task<IncrementalResult> RunAsync(CancellationToken ct = default)
+    public Task<IncrementalResult> RunAsync(CancellationToken ct = default) =>
+        RunAsync(source: null, ct);
+
+    public async Task<IncrementalResult> RunAsync(
+        IIncrementalSource? source,
+        CancellationToken ct = default)
     {
-        var source = new AgentIncrementalSource(
+        source ??= new AgentIncrementalSource(
             _options.LegacyDbPath,
             ResolveAgentExecutable());
 
@@ -94,13 +99,17 @@ public sealed class PipelineHost
     /// Hard deletes never appear in a timestamp window. This pass compares keys
     /// present in the source with the dimensional table and marks missing rows.
     /// </summary>
-    public async Task<int> ReconcileDeletesAsync(CancellationToken ct = default)
-    {
-        var source = new AgentIncrementalSource(
-            _options.LegacyDbPath,
-            ResolveAgentExecutable());
+    public Task<int> ReconcileDeletesAsync(CancellationToken ct = default) =>
+        ReconcileDeletesAsync(legacyKeys: null, ct);
 
-        var legacyKeys = await source.ReadKeysAsync(ct);
+    public async Task<int> ReconcileDeletesAsync(
+        IReadOnlySet<long>? legacyKeys,
+        CancellationToken ct = default)
+    {
+        legacyKeys ??= await new AgentIncrementalSource(
+                _options.LegacyDbPath,
+                ResolveAgentExecutable())
+            .ReadKeysAsync(ct);
 
         await using var connection = new SqliteConnection($"Data Source={_options.WarehouseDbPath}");
         await connection.OpenAsync(ct);

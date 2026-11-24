@@ -35,3 +35,32 @@ jobs:
         with:
           name: packages
           path: artifacts/*.nupkg
+
+  windows-x86:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore PipelineKit.slnx --configfile NuGet.Config
+
+      - name: Build
+        run: dotnet build PipelineKit.slnx -c Release --no-restore
+
+      - name: Test
+        run: dotnet test PipelineKit.slnx -c Release --no-build
+
+      - name: Publish x86 sample
+        run: dotnet publish samples/LegacyBridge/LegacyBridge.Control -c Release -r win-x86 --self-contained false -o publish-x86
+
+      - name: Run x86 sample end to end
+        shell: pwsh
+        run: |
+          .\publish-x86\LegacyBridge.Control.exe --reset --data "${{ github.workspace }}\ci-data"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

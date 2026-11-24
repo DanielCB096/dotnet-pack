@@ -18,6 +18,7 @@
     <Project Path="templates/PipelineKit.Templates.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/LegacyBridge.Tests/LegacyBridge.Tests.csproj" />
     <Project Path="tests/PipelineKit.AgentProtocol.Tests/PipelineKit.AgentProtocol.Tests.csproj" />
     <Project Path="tests/PipelineKit.Incremental.Sqlite.Tests/PipelineKit.Incremental.Sqlite.Tests.csproj" />
     <Project Path="tests/PipelineKit.Incremental.Tests/PipelineKit.Incremental.Tests.csproj" />

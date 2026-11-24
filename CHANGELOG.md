@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Integration tests for the LegacyBridge pipeline: initial load, overlap
+  idempotency, mutation and hard-delete reconciliation.
+- Windows CI job that publishes and runs the sample as `win-x86`.
+
 ## [0.3.0] - 2026-11-24
 
 ### Added

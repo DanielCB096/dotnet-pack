@@ -106,10 +106,11 @@ Version `0.3.0`. The API may change before `1.0.0`.
 Verified locally:
 
 - `dotnet build`: 0 warnings, 0 errors.
-- `dotnet test`: **22/22 tests** across 6 test projects.
+- `dotnet test`: **25/25 tests** across 7 test projects.
 - `dotnet pack`: 8 packages, including `netstandard2.0` and `net10.0` assets
   for `PipelineKit.AgentProtocol`.
 - `LegacyBridge` end-to-end sample runs against a simulated legacy database.
+- `LegacyBridge` is published and executed as `win-x86` in CI.
 - `dotnet new pipelinekit-job` generates a runnable project.
 
 Before publishing, update `PackageProjectUrl` and `RepositoryUrl` in

@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.Json;
 using LegacyBridge.Control;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
@@ -85,6 +86,32 @@ public sealed class PipelineIntegrationTests : IDisposable
         Assert.Equal(7, report.DwRows);
         Assert.Equal(2, report.DwDeleted);
         Assert.Equal(2, report.Batches);
+    }
+
+    [Fact]
+    public async Task Outbox_relay_publishes_each_message_once()
+    {
+        using var loggerFactory = LoggerFactory.Create(_ => { });
+        var options = new ControlOptions(_dataDirectory, Reset: true);
+        var host = new PipelineHost(options, TimeProvider.System, loggerFactory);
+        await host.InitializeAsync();
+
+        var legacy = new LegacyDatabase(options.LegacyDbPath);
+        await host.RunAsync(new FakeIncrementalSource(ToSourceRows(await legacy.ReadAllAsync())));
+
+        var messagesPath = Path.Combine(_dataDirectory, "messages.ndjson");
+        var relay = new OutboxRelay(options.WarehouseDbPath, messagesPath, TimeProvider.System);
+
+        var first = await relay.PublishPendingAsync();
+        var second = await relay.PublishPendingAsync();
+
+        Assert.Equal(1, first);
+        Assert.Equal(0, second);
+
+        var lines = await File.ReadAllLinesAsync(messagesPath);
+        var line = Assert.Single(lines);
+        using var document = JsonDocument.Parse(line);
+        Assert.Equal("orders.batch.loaded", document.RootElement.GetProperty("type").GetString());
     }
 
     public void Dispose()

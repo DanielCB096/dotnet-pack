@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.0] - 2026-11-24
+
+### Added
+
+- `PipelineKit.Incremental.EntityFrameworkCore`: EF Core checkpoint store and
+  model-builder extension, with tests.
+- LegacyBridge outbox: every batch writes an event in the same transaction and
+  a relay publishes it to an NDJSON file. Second relay pass publishes zero.
+- CI generates, restores and runs the `dotnet new pipelinekit-job` template.
+
 ## [Unreleased]
 
 ### Added

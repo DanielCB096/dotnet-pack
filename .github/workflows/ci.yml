@@ -30,6 +30,17 @@ jobs:
       - name: Pack
         run: dotnet pack PipelineKit.slnx -c Release --no-build -o artifacts
 
+      - name: Test dotnet new template
+        run: |
+          dotnet new install artifacts/PipelineKit.Templates.0.4.0.nupkg
+          dotnet new pipelinekit-job -n CiTemplate -o /tmp/ci-template
+          dotnet restore /tmp/ci-template/CiTemplate.csproj \
+            --source "$PWD/artifacts" \
+            --source "https://api.nuget.org/v3/index.json"
+          dotnet run --project /tmp/ci-template/CiTemplate.csproj -c Release
+          dotnet run --project /tmp/ci-template/CiTemplate.csproj -c Release | tee /tmp/ci-template-run2.txt
+          grep -q "extracted=0" /tmp/ci-template-run2.txt
+
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:

@@ -21,6 +21,7 @@ Adapters can be added without dragging infrastructure into your domain.
 |---|---|---|
 | `PipelineKit.Incremental` | Checkpoints, watermarks, overlap windows and commit-after-success | `net10.0` |
 | `PipelineKit.Incremental.Sqlite` | Persistent checkpoints in SQLite | `net10.0` |
+| `PipelineKit.Incremental.EntityFrameworkCore` | Checkpoints through EF Core | `net10.0` |
 | `PipelineKit.Quality` | Rules, quarantine, schema drift and reconciliation | `net10.0` |
 | `PipelineKit.Telemetry` | `ActivitySource` and `Meter` conventions for batches | `net10.0` |
 | `PipelineKit.Telemetry.OpenTelemetry` | Resource, tracing/metrics registration and OTLP/console exporters | `net10.0` |
@@ -87,11 +88,11 @@ docs/adr/   architecture decisions
 ## Template
 
 ```bash
-dotnet new install artifacts/PipelineKit.Templates.0.3.0.nupkg
+dotnet new install artifacts/PipelineKit.Templates.0.4.0.nupkg
 dotnet new pipelinekit-job -n MyPipeline
 ```
 
-From GitHub Packages, add the feed and install `PipelineKit.Templates::0.3.0`.
+From GitHub Packages, add the feed and install `PipelineKit.Templates::0.4.0`.
 See [templates/pipelinekit-job/README.md](templates/pipelinekit-job/README.md).
 
 ## Install from GitHub Packages
@@ -101,15 +102,16 @@ See [docs/PUBLISHING.md](docs/PUBLISHING.md) for the feed URL and credentials.
 
 ## Status
 
-Version `0.3.0`. The API may change before `1.0.0`.
+Version `0.4.0`. The API may change before `1.0.0`.
 
 Verified locally:
 
 - `dotnet build`: 0 warnings, 0 errors.
-- `dotnet test`: **25/25 tests** across 7 test projects.
-- `dotnet pack`: 8 packages, including `netstandard2.0` and `net10.0` assets
+- `dotnet test`: **29/29 tests** across 8 test projects.
+- `dotnet pack`: 9 packages, including `netstandard2.0` and `net10.0` assets
   for `PipelineKit.AgentProtocol`.
 - `LegacyBridge` end-to-end sample runs against a simulated legacy database.
+- `LegacyBridge` publishes an outbox event per batch and relays it exactly once.
 - `LegacyBridge` is published and executed as `win-x86` in CI.
 - `dotnet new pipelinekit-job` generates a runnable project.
 
@@ -134,7 +136,8 @@ Reconciliation: match=True
 
 [`samples/LegacyBridge`](samples/LegacyBridge/README.md) is a complete pipeline:
 a simulated legacy ERP, an isolated agent process, incremental extraction,
-quarantine, idempotent upserts, hard-delete reconciliation and OpenTelemetry.
+quarantine, idempotent upserts, hard-delete reconciliation, a transactional
+outbox and OpenTelemetry.
 
 ```bash
 dotnet run --project samples/LegacyBridge/LegacyBridge.Control -c Release -- --reset

@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.Json;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -111,6 +112,7 @@ public sealed class SqliteBatchSink : IBatchSink
 
         var finished = _timeProvider.GetUtcNow();
         InsertBatch(connection, transaction, context, extracted, written, rejected, finished);
+        InsertOutbox(connection, transaction, context, extracted, written, rejected, finished);
 
         transaction.Commit();
 
@@ -289,6 +291,41 @@ public sealed class SqliteBatchSink : IBatchSink
         command.Parameters.AddWithValue("$rows_rejected", rejected);
         command.Parameters.AddWithValue("$started_at", context.StartedAt.ToUniversalTime().ToString("O"));
         command.Parameters.AddWithValue("$duration_ms", (finished - context.StartedAt).TotalMilliseconds);
+        command.ExecuteNonQuery();
+    }
+
+    private static void InsertOutbox(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        BatchContext context,
+        long extracted,
+        long written,
+        long rejected,
+        DateTimeOffset now)
+    {
+        var payload = JsonSerializer.Serialize(
+            new Dictionary<string, object?>(StringComparer.Ordinal)
+            {
+                ["batchId"] = context.BatchId,
+                ["pipeline"] = context.Pipeline,
+                ["source"] = context.Source,
+                ["table"] = context.Table,
+                ["rowsExtracted"] = extracted,
+                ["rowsWritten"] = written,
+                ["rowsRejected"] = rejected,
+            });
+
+        using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText =
+            """
+            insert into outbox (message_id, type, payload, occurred_at)
+            values ($message_id, $type, $payload, $occurred_at);
+            """;
+        command.Parameters.AddWithValue("$message_id", Guid.NewGuid().ToString("N"));
+        command.Parameters.AddWithValue("$type", "orders.batch.loaded");
+        command.Parameters.AddWithValue("$payload", payload);
+        command.Parameters.AddWithValue("$occurred_at", now.ToUniversalTime().ToString("O"));
         command.ExecuteNonQuery();
     }
 

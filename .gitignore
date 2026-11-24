@@ -6,6 +6,7 @@ publish-x86-sc/
 ci-data/
 ci-data-x86/
 ci-data-x86-sc/
+checkpoints.db
 *.user
 *.suo
 .vs/

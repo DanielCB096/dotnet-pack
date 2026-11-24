@@ -68,6 +68,15 @@ public static class WarehouseSchema
                 started_at text not null,
                 duration_ms real not null
             );
+
+            create table if not exists outbox (
+                id integer primary key autoincrement,
+                message_id text not null unique,
+                type text not null,
+                payload text not null,
+                occurred_at text not null,
+                processed_at text null
+            );
             """;
         await command.ExecuteNonQueryAsync(ct);
     }

@@ -158,7 +158,9 @@ public sealed class PipelineHost
             DwDeleted: await ScalarAsync(connection, "select count(*) from dw_orders where is_deleted = 1;", ct),
             QuarantineRows: await ScalarAsync(connection, "select count(*) from quarantine;", ct),
             Batches: await ScalarAsync(connection, "select count(*) from batches;", ct),
-            Checkpoints: await ScalarAsync(connection, "select count(*) from checkpoints;", ct));
+            Checkpoints: await ScalarAsync(connection, "select count(*) from checkpoints;", ct),
+            OutboxPending: await ScalarAsync(connection, "select count(*) from outbox where processed_at is null;", ct),
+            OutboxTotal: await ScalarAsync(connection, "select count(*) from outbox;", ct));
     }
 
     private static IQualityRule[] Rules() =>
@@ -203,4 +205,6 @@ public sealed record LegacyBridgeReport(
     long DwDeleted,
     long QuarantineRows,
     long Batches,
-    long Checkpoints);
+    long Checkpoints,
+    long OutboxPending,
+    long OutboxTotal);

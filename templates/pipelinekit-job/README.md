@@ -8,10 +8,12 @@ dotnet new pipelinekit-job -n PipelineKitJob
 
 ## What it does
 
-- Uses a SQLite checkpoint store (`checkpoints.db`).
+- Uses a SQLite checkpoint store (`data/checkpoints.db` next to the app).
 - Runs an incremental batch with a timestamp watermark and overlap.
 - Demonstrates a data quality rule and quarantine.
 - Emits a `PipelineScope` for traces and metrics.
+
+Set `PIPELINEKIT_DATA` to choose a different data directory.
 
 Run it:
 

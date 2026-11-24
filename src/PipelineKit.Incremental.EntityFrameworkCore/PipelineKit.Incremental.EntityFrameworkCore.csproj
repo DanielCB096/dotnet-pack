@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PipelineKit.Incremental.EntityFrameworkCore</PackageId>
+    <Description>EF Core checkpoint store for PipelineKit incremental pipelines.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PipelineKit.Incremental\PipelineKit.Incremental.csproj" />
+  </ItemGroup>
+
+</Project>

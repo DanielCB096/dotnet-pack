@@ -3,8 +3,16 @@ using PipelineKit.Incremental.Sqlite;
 using PipelineKit.Quality;
 using PipelineKit.Telemetry;
 
-var store = SqliteCheckpointStore.FromPath("checkpoints.db");
+var dataDirectory = Environment.GetEnvironmentVariable("PIPELINEKIT_DATA")
+    ?? Path.Combine(AppContext.BaseDirectory, "data");
+
+Directory.CreateDirectory(dataDirectory);
+var checkpointPath = Path.Combine(dataDirectory, "checkpoints.db");
+
+var store = SqliteCheckpointStore.FromPath(checkpointPath);
 await store.EnsureSchemaAsync();
+
+Console.WriteLine($"Checkpoint database: {checkpointPath}");
 
 var runner = new IncrementalRunner(store);
 var request = new IncrementalRequest

@@ -55,6 +55,17 @@ Print("Run 3 (incremental)", await host.RunAsync());
 var reconciled = await host.ReconcileDeletesAsync();
 Console.WriteLine($"Reconciliación de borrados: {reconciled} fila(s) marcadas como eliminadas.");
 
+var relay = new OutboxRelay(
+    options.WarehouseDbPath,
+    Path.Combine(options.DataDirectory, "messages.ndjson"),
+    TimeProvider.System);
+
+var published = await relay.PublishPendingAsync();
+Console.WriteLine($"Outbox publicado: {published} evento(s) en messages.ndjson.");
+
+var secondPass = await relay.PublishPendingAsync();
+Console.WriteLine($"Outbox segunda pasada: {secondPass} evento(s) (idempotente).");
+
 var report = await host.GetReportAsync();
 Console.WriteLine();
 Console.WriteLine("Resumen del warehouse:");
@@ -62,6 +73,7 @@ Console.WriteLine($"  dw_orders:   {report.DwRows} filas ({report.DwDeleted} mar
 Console.WriteLine($"  quarantine:  {report.QuarantineRows} registros");
 Console.WriteLine($"  batches:     {report.Batches}");
 Console.WriteLine($"  checkpoints: {report.Checkpoints}");
+Console.WriteLine($"  outbox:      {report.OutboxTotal} eventos ({report.OutboxPending} pendientes)");
 
 static void Print(string label, IncrementalResult result) =>
     Console.WriteLine(

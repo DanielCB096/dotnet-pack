@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageType>Template</PackageType>
+    <PackageId>PipelineKit.Templates</PackageId>
+    <Title>PipelineKit templates</Title>
+    <Description>dotnet new templates for PipelineKit incremental jobs.</Description>
+    <PackageTags>dotnet-new;templates;pipelinekit;etl;incremental</PackageTags>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="pipelinekit-job\**\*" Exclude="pipelinekit-job\**\bin\**;pipelinekit-job\**\obj\**" />
+    <Compile Remove="pipelinekit-job\**\*.cs" />
+    <None Remove="pipelinekit-job\**\*" />
+  </ItemGroup>
+
+</Project>

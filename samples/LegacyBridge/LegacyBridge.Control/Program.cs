@@ -5,6 +5,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using PipelineKit.Incremental;
 using PipelineKit.Telemetry;
+using PipelineKit.Telemetry.OpenTelemetry;
 
 if (args.Contains("--agent"))
 {
@@ -23,14 +24,18 @@ using var loggerFactory = LoggerFactory.Create(builder =>
     builder.SetMinimumLevel(LogLevel.Information);
 });
 
+var resource = PipelineTelemetryResource.Create("legacybridge", "0.3.0");
+
 using var tracerProvider = Sdk.CreateTracerProviderBuilder()
-    .AddSource(PipelineTelemetry.SourceName)
-    .AddConsoleExporter()
+    .SetResourceBuilder(resource)
+    .AddPipelineKitTracing()
+    .AddPipelineKitConsoleExporter()
     .Build();
 
 using var meterProvider = Sdk.CreateMeterProviderBuilder()
-    .AddMeter(PipelineTelemetry.SourceName)
-    .AddConsoleExporter()
+    .SetResourceBuilder(resource)
+    .AddPipelineKitMetrics()
+    .AddPipelineKitConsoleExporter()
     .Build();
 
 Console.WriteLine("LegacyBridge — ETL incremental con agente aislado");

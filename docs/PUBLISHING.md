@@ -6,14 +6,14 @@ los paquetes desde GitHub Packages.
 ## 1. Publicar una versión
 
 ```powershell
-git tag v0.2.0
-git push origin v0.2.0
+git tag v0.3.0
+git push origin v0.3.0
 ```
 
 Eso lanza el workflow `publish`, que:
 
 1. Restaura, compila y prueba.
-2. Genera los cinco `.nupkg`.
+2. Genera los `.nupkg`.
 3. Los publica en GitHub Packages.
 4. Crea una release con los paquetes adjuntos.
 
@@ -48,7 +48,7 @@ El token debe tener permiso `read:packages`.
 Luego:
 
 ```bash
-dotnet add package PipelineKit.Incremental --version 0.2.0
+dotnet add package PipelineKit.Incremental --version 0.3.0
 ```
 
 ## 4. Publicar a mano (opcional)
@@ -66,13 +66,26 @@ dotnet nuget push "artifacts/*.nupkg" `
 La versión está en `Directory.Build.props`:
 
 ```xml
-<Version>0.2.0</Version>
+<Version>0.3.0</Version>
 ```
 
 Para una nueva entrega, cámbiala, actualiza `CHANGELOG.md`, haz commit y sube
 una etiqueta nueva:
 
 ```powershell
-git tag v0.3.0
-git push origin v0.3.0
+git tag v0.4.0
+git push origin v0.4.0
+```
+
+## 6. Instalar la plantilla
+
+```powershell
+dotnet new install PipelineKit.Templates::0.3.0 `
+  --add-source "https://nuget.pkg.github.com/DanielCB096/index.json"
+```
+
+O desde el paquete local:
+
+```powershell
+dotnet new install artifacts/PipelineKit.Templates.0.3.0.nupkg
 ```

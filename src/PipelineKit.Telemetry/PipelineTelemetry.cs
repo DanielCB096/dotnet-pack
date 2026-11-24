@@ -10,6 +10,7 @@ namespace PipelineKit.Telemetry;
 public static class PipelineTelemetry
 {
     public const string SourceName = "PipelineKit";
+    public const string MeterName = SourceName;
     public const string Version = "0.1.0";
 
     public static readonly ActivitySource ActivitySource = new(SourceName, Version);

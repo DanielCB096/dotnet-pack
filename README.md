@@ -20,10 +20,13 @@ Adapters can be added without dragging infrastructure into your domain.
 | Package | What it does | Target |
 |---|---|---|
 | `PipelineKit.Incremental` | Checkpoints, watermarks, overlap windows and commit-after-success | `net10.0` |
+| `PipelineKit.Incremental.Sqlite` | Persistent checkpoints in SQLite | `net10.0` |
 | `PipelineKit.Quality` | Rules, quarantine, schema drift and reconciliation | `net10.0` |
 | `PipelineKit.Telemetry` | `ActivitySource` and `Meter` conventions for batches | `net10.0` |
+| `PipelineKit.Telemetry.OpenTelemetry` | Resource, tracing/metrics registration and OTLP/console exporters | `net10.0` |
 | `PipelineKit.AgentProtocol` | JSON contract and process host for x86 agents | `netstandard2.0`, `net10.0` |
 | `PipelineKit.Testing` | Fake source, collecting sink, dirty data and fixed clock | `net10.0` |
+| `PipelineKit.Templates` | `dotnet new pipelinekit-job` template | template |
 
 `AgentProtocol` targets `netstandard2.0` so the same contract can be used by a
 modern x64 orchestrator and by a .NET Framework 4.8 x86 agent when the legacy
@@ -77,8 +80,19 @@ the next run re-reads the same window and the sink must be idempotent.
 src/        packages
 tests/      unit tests
 samples/    runnable end-to-end sample
+templates/  dotnet new template
 docs/adr/   architecture decisions
 ```
+
+## Template
+
+```bash
+dotnet new install artifacts/PipelineKit.Templates.0.3.0.nupkg
+dotnet new pipelinekit-job -n MyPipeline
+```
+
+From GitHub Packages, add the feed and install `PipelineKit.Templates::0.3.0`.
+See [templates/pipelinekit-job/README.md](templates/pipelinekit-job/README.md).
 
 ## Install from GitHub Packages
 
@@ -87,15 +101,16 @@ See [docs/PUBLISHING.md](docs/PUBLISHING.md) for the feed URL and credentials.
 
 ## Status
 
-Version `0.2.0`. The API may change before `1.0.0`.
+Version `0.3.0`. The API may change before `1.0.0`.
 
 Verified locally:
 
 - `dotnet build`: 0 warnings, 0 errors.
-- `dotnet test`: **16/16 tests** across 4 test projects.
-- `dotnet pack`: 5 packages, including `netstandard2.0` and `net10.0` assets
+- `dotnet test`: **22/22 tests** across 6 test projects.
+- `dotnet pack`: 8 packages, including `netstandard2.0` and `net10.0` assets
   for `PipelineKit.AgentProtocol`.
 - `LegacyBridge` end-to-end sample runs against a simulated legacy database.
+- `dotnet new pipelinekit-job` generates a runnable project.
 
 Before publishing, update `PackageProjectUrl` and `RepositoryUrl` in
 `Directory.Build.props` with your GitHub repository.

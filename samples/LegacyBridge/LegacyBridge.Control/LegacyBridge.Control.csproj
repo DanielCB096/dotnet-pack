@@ -10,14 +10,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
-    <PackageReference Include="OpenTelemetry" />
-    <PackageReference Include="OpenTelemetry.Exporter.Console" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\PipelineKit.Incremental\PipelineKit.Incremental.csproj" />
+    <ProjectReference Include="..\..\..\src\PipelineKit.Incremental.Sqlite\PipelineKit.Incremental.Sqlite.csproj" />
     <ProjectReference Include="..\..\..\src\PipelineKit.Quality\PipelineKit.Quality.csproj" />
     <ProjectReference Include="..\..\..\src\PipelineKit.Telemetry\PipelineKit.Telemetry.csproj" />
+    <ProjectReference Include="..\..\..\src\PipelineKit.Telemetry.OpenTelemetry\PipelineKit.Telemetry.OpenTelemetry.csproj" />
     <ProjectReference Include="..\..\..\src\PipelineKit.AgentProtocol\PipelineKit.AgentProtocol.csproj" />
   </ItemGroup>
 

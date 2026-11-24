@@ -2,14 +2,36 @@ using System.Globalization;
 using Microsoft.Data.Sqlite;
 using PipelineKit.Incremental;
 
-namespace LegacyBridge.Control;
+namespace PipelineKit.Incremental.Sqlite;
 
-/// <summary>Persists PipelineKit checkpoints in SQLite.</summary>
-public sealed class SqliteCheckpointStore(string warehousePath) : ICheckpointStore
+/// <summary>Persists checkpoints in a SQLite database.</summary>
+public sealed class SqliteCheckpointStore : ICheckpointStore
 {
+    private readonly string _connectionString;
+
+    public SqliteCheckpointStore(string connectionString)
+    {
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new ArgumentException("Connection string is required.", nameof(connectionString));
+        }
+
+        _connectionString = connectionString;
+    }
+
+    public static SqliteCheckpointStore FromPath(string databasePath)
+    {
+        if (string.IsNullOrWhiteSpace(databasePath))
+        {
+            throw new ArgumentException("Database path is required.", nameof(databasePath));
+        }
+
+        return new SqliteCheckpointStore($"Data Source={databasePath}");
+    }
+
     public async Task EnsureSchemaAsync(CancellationToken ct = default)
     {
-        await using var connection = new SqliteConnection($"Data Source={warehousePath}");
+        await using var connection = new SqliteConnection(_connectionString);
         await connection.OpenAsync(ct);
         await using var command = connection.CreateCommand();
         command.CommandText =
@@ -31,7 +53,7 @@ public sealed class SqliteCheckpointStore(string warehousePath) : ICheckpointSto
 
     public async Task<Checkpoint?> GetAsync(CheckpointKey key, CancellationToken ct = default)
     {
-        await using var connection = new SqliteConnection($"Data Source={warehousePath}");
+        await using var connection = new SqliteConnection(_connectionString);
         await connection.OpenAsync(ct);
         await using var command = connection.CreateCommand();
         command.CommandText =
@@ -68,7 +90,7 @@ public sealed class SqliteCheckpointStore(string warehousePath) : ICheckpointSto
         Checkpoint checkpoint,
         CancellationToken ct = default)
     {
-        await using var connection = new SqliteConnection($"Data Source={warehousePath}");
+        await using var connection = new SqliteConnection(_connectionString);
         await connection.OpenAsync(ct);
         await using var command = connection.CreateCommand();
         command.CommandText =

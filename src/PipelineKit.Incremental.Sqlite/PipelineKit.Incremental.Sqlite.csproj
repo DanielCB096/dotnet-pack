@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PipelineKit.Incremental.Sqlite</PackageId>
+    <Description>SQLite checkpoint store for PipelineKit incremental pipelines.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PipelineKit.Incremental\PipelineKit.Incremental.csproj" />
+  </ItemGroup>
+
+</Project>

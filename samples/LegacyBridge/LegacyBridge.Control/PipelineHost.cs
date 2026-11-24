@@ -1,6 +1,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using PipelineKit.Incremental;
+using PipelineKit.Incremental.Sqlite;
 using PipelineKit.Quality;
 using PipelineKit.Telemetry;
 
@@ -34,7 +35,7 @@ public sealed class PipelineHost
         _logger = loggerFactory.CreateLogger<PipelineHost>();
         _sinkLogger = loggerFactory.CreateLogger<SqliteBatchSink>();
         _runnerLogger = loggerFactory.CreateLogger<IncrementalRunner>();
-        _checkpoints = new SqliteCheckpointStore(options.WarehouseDbPath);
+        _checkpoints = SqliteCheckpointStore.FromPath(options.WarehouseDbPath);
     }
 
     public async Task InitializeAsync(CancellationToken ct = default)

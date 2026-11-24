@@ -7,15 +7,22 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/PipelineKit.AgentProtocol/PipelineKit.AgentProtocol.csproj" />
+    <Project Path="src/PipelineKit.Incremental.Sqlite/PipelineKit.Incremental.Sqlite.csproj" />
     <Project Path="src/PipelineKit.Incremental/PipelineKit.Incremental.csproj" />
     <Project Path="src/PipelineKit.Quality/PipelineKit.Quality.csproj" />
+    <Project Path="src/PipelineKit.Telemetry.OpenTelemetry/PipelineKit.Telemetry.OpenTelemetry.csproj" />
     <Project Path="src/PipelineKit.Telemetry/PipelineKit.Telemetry.csproj" />
     <Project Path="src/PipelineKit.Testing/PipelineKit.Testing.csproj" />
   </Folder>
+  <Folder Name="/templates/">
+    <Project Path="templates/PipelineKit.Templates.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/PipelineKit.AgentProtocol.Tests/PipelineKit.AgentProtocol.Tests.csproj" />
+    <Project Path="tests/PipelineKit.Incremental.Sqlite.Tests/PipelineKit.Incremental.Sqlite.Tests.csproj" />
     <Project Path="tests/PipelineKit.Incremental.Tests/PipelineKit.Incremental.Tests.csproj" />
     <Project Path="tests/PipelineKit.Quality.Tests/PipelineKit.Quality.Tests.csproj" />
+    <Project Path="tests/PipelineKit.Telemetry.OpenTelemetry.Tests/PipelineKit.Telemetry.OpenTelemetry.Tests.csproj" />
     <Project Path="tests/PipelineKit.Telemetry.Tests/PipelineKit.Telemetry.Tests.csproj" />
   </Folder>
 </Solution>

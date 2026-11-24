@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0] - 2026-11-24
+
+### Added
+
+- `PipelineKit.Incremental.Sqlite`: SQLite checkpoint store, moved out of the
+  LegacyBridge sample and published as a package.
+- `PipelineKit.Telemetry.OpenTelemetry`: resource helper, tracing/metrics
+  registration and configurable OTLP/console exporters.
+- `PipelineKit.Templates`: `dotnet new pipelinekit-job` template.
+- Tests for both new packages.
+
 ## [0.2.0] - 2026-11-24
 
 ### Added

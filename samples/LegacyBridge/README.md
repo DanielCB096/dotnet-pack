@@ -86,6 +86,7 @@ dotnet publish samples/LegacyBridge/LegacyBridge.Control -c Release -r win-x86 -
 | `AgentProgram.cs` | Agent mode: SQLite → NDJSON |
 | `AgentIncrementalSource.cs` | PipelineKit source backed by the agent process |
 | `SqliteBatchSink.cs` | Quality, staging, dimensional upsert and quarantine |
-| `SqliteCheckpointStore.cs` | Persistent checkpoints |
 | `PipelineHost.cs` | Orchestration, reconciliation and report |
 | `Program.cs` | CLI and OpenTelemetry console exporter |
+
+The checkpoint store is provided by `PipelineKit.Incremental.Sqlite`.

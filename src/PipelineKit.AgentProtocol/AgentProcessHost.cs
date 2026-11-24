@@ -15,12 +15,14 @@ public sealed class AgentProcessHost
     private readonly string? _workingDirectory;
     private readonly TimeSpan _timeout;
     private readonly bool _keepTemporaryFiles;
+    private readonly string? _leadingArguments;
 
     public AgentProcessHost(
         string executablePath,
         string? workingDirectory = null,
         TimeSpan? timeout = null,
-        bool keepTemporaryFiles = false)
+        bool keepTemporaryFiles = false,
+        string? leadingArguments = null)
     {
         if (string.IsNullOrWhiteSpace(executablePath))
         {
@@ -31,6 +33,7 @@ public sealed class AgentProcessHost
         _workingDirectory = workingDirectory;
         _timeout = timeout ?? TimeSpan.FromMinutes(10);
         _keepTemporaryFiles = keepTemporaryFiles;
+        _leadingArguments = leadingArguments;
     }
 
     public async Task<AgentResult> RunAsync(AgentRequest request, CancellationToken ct = default)
@@ -59,6 +62,9 @@ public sealed class AgentProcessHost
             {
                 FileName = _executablePath,
                 Arguments = string.Concat(
+                    string.IsNullOrWhiteSpace(_leadingArguments)
+                        ? string.Empty
+                        : _leadingArguments + " ",
                     "--request ", Quote(requestPath),
                     " --progress ", Quote(progressPath),
                     " --result ", Quote(resultPath)),

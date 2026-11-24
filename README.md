@@ -87,14 +87,15 @@ See [docs/PUBLISHING.md](docs/PUBLISHING.md) for the feed URL and credentials.
 
 ## Status
 
-Version `0.1.0`. The API may change before `1.0.0`.
+Version `0.2.0`. The API may change before `1.0.0`.
 
 Verified locally:
 
 - `dotnet build`: 0 warnings, 0 errors.
-- `dotnet test`: **15/15 tests** across 4 test projects.
+- `dotnet test`: **16/16 tests** across 4 test projects.
 - `dotnet pack`: 5 packages, including `netstandard2.0` and `net10.0` assets
   for `PipelineKit.AgentProtocol`.
+- `LegacyBridge` end-to-end sample runs against a simulated legacy database.
 
 Before publishing, update `PackageProjectUrl` and `RepositoryUrl` in
 `Directory.Build.props` with your GitHub repository.
@@ -111,6 +112,16 @@ Schema drift: 3 change(s)
   - LengthChanged: code (3 -> 9)
   - Added: segment ( -> varchar)
 Reconciliation: match=True
+```
+
+## End-to-end sample
+
+[`samples/LegacyBridge`](samples/LegacyBridge/README.md) is a complete pipeline:
+a simulated legacy ERP, an isolated agent process, incremental extraction,
+quarantine, idempotent upserts, hard-delete reconciliation and OpenTelemetry.
+
+```bash
+dotnet run --project samples/LegacyBridge/LegacyBridge.Control -c Release -- --reset
 ```
 
 ## License

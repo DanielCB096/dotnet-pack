@@ -68,7 +68,8 @@ public sealed record BatchWriteResult(
     long? LastKey = null,
     DateTimeOffset? LastModified = null,
     string? Period = null,
-    string? RowHash = null);
+    string? RowHash = null,
+    long RowsUnchanged = 0);
 
 /// <summary>Outcome of an incremental run.</summary>
 public sealed record IncrementalResult(
@@ -77,7 +78,8 @@ public sealed record IncrementalResult(
     long RowsWritten,
     long RowsRejected,
     TimeSpan Duration,
-    bool CheckpointCommitted);
+    bool CheckpointCommitted,
+    long RowsUnchanged = 0);
 
 /// <summary>One row read from the source.</summary>
 public sealed class SourceRow

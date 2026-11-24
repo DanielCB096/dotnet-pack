@@ -73,9 +73,9 @@ public sealed class IncrementalRunner
         }
 
         var next = new Checkpoint(
-            writeResult.LastKey ?? tracking.LastKey,
-            writeResult.LastModified ?? tracking.LastModified,
-            writeResult.Period ?? tracking.LastPeriod,
+            Max(checkpoint?.LastKey, writeResult.LastKey ?? tracking.LastKey),
+            Max(checkpoint?.LastModified, writeResult.LastModified ?? tracking.LastModified),
+            MaxPeriod(checkpoint?.Period, writeResult.Period ?? tracking.LastPeriod),
             writeResult.RowHash ?? tracking.LastHash);
 
         await _store.CommitAsync(key, next, ct).ConfigureAwait(false);
@@ -94,7 +94,33 @@ public sealed class IncrementalRunner
             writeResult.RowsWritten,
             writeResult.RowsRejected,
             duration,
-            CheckpointCommitted: true);
+            CheckpointCommitted: true,
+            RowsUnchanged: writeResult.RowsUnchanged);
+    }
+
+    private static long? Max(long? left, long? right) =>
+        left.HasValue && right.HasValue
+            ? Math.Max(left.Value, right.Value)
+            : left ?? right;
+
+    private static DateTimeOffset? Max(DateTimeOffset? left, DateTimeOffset? right) =>
+        left.HasValue && right.HasValue
+            ? (left.Value >= right.Value ? left : right)
+            : left ?? right;
+
+    private static string? MaxPeriod(string? left, string? right)
+    {
+        if (string.IsNullOrEmpty(left))
+        {
+            return right;
+        }
+
+        if (string.IsNullOrEmpty(right))
+        {
+            return left;
+        }
+
+        return string.CompareOrdinal(left, right) >= 0 ? left : right;
     }
 
     private sealed class TrackingAsyncEnumerable

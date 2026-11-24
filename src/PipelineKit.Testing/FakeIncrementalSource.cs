@@ -19,12 +19,17 @@ public sealed class FakeIncrementalSource : IIncrementalSource
         {
             ct.ThrowIfCancellationRequested();
 
-            if (window.AfterKey is { } afterKey && row.Key is { } key && key <= afterKey)
+            // A timestamp window is the primary filter; the key is only a
+            // tie-breaker. Applying both with AND would miss late updates to
+            // rows whose key is lower than the checkpoint.
+            if (window.From is { } from)
             {
-                continue;
+                if (row.ModifiedAt is { } modified && modified < from)
+                {
+                    continue;
+                }
             }
-
-            if (window.From is { } from && row.ModifiedAt is { } modified && modified < from)
+            else if (window.AfterKey is { } afterKey && row.Key is { } key && key <= afterKey)
             {
                 continue;
             }

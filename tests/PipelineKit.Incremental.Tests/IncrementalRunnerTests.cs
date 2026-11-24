@@ -105,4 +105,53 @@ public sealed class IncrementalRunnerTests
         Assert.Equal(new DateTimeOffset(2026, 2, 1, 9, 45, 0, TimeSpan.Zero), window.From);
         Assert.Equal(10, window.AfterKey);
     }
+
+    [Fact]
+    public async Task Late_update_with_lower_key_is_read_and_does_not_regress_the_checkpoint()
+    {
+        var store = new InMemoryCheckpointStore();
+        var clock = new FixedTimeProvider(new DateTimeOffset(2026, 2, 2, 0, 0, 0, TimeSpan.Zero));
+        var runner = new IncrementalRunner(store, clock);
+        var request = new IncrementalRequest
+        {
+            Pipeline = "sales",
+            Source = "mx",
+            Table = "orders",
+            Strategy = IncrementalStrategy.TimestampAndKey,
+            Overlap = TimeSpan.FromMinutes(5),
+        };
+
+        var initial = new[]
+        {
+            Row(1, new DateTimeOffset(2026, 1, 1, 9, 0, 0, TimeSpan.Zero)),
+            Row(2, new DateTimeOffset(2026, 1, 1, 9, 1, 0, TimeSpan.Zero)),
+            Row(3, new DateTimeOffset(2026, 1, 1, 9, 2, 0, TimeSpan.Zero)),
+        };
+
+        await runner.RunAsync(request, new FakeIncrementalSource(initial), new CollectingBatchSink());
+
+        var late = Row(2, new DateTimeOffset(2026, 1, 1, 10, 0, 0, TimeSpan.Zero));
+        var second = await runner.RunAsync(
+            request,
+            new FakeIncrementalSource([late]),
+            new CollectingBatchSink());
+
+        Assert.Equal(1, second.RowsExtracted);
+
+        var checkpoint = await store.GetAsync(
+            new CheckpointKey("sales", "mx", "orders", nameof(IncrementalStrategy.TimestampAndKey)));
+
+        Assert.Equal(3, checkpoint!.LastKey);
+        Assert.Equal(late.ModifiedAt, checkpoint.LastModified);
+    }
+
+    private static SourceRow Row(long id, DateTimeOffset modified) =>
+        new(
+            new Dictionary<string, object?>
+            {
+                ["id"] = id,
+            },
+            key: id,
+            modifiedAt: modified,
+            period: modified.ToString("yyyyMM"));
 }

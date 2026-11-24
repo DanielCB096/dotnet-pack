@@ -80,6 +80,11 @@ samples/    runnable end-to-end sample
 docs/adr/   architecture decisions
 ```
 
+## Install from GitHub Packages
+
+The `publish` workflow publishes the packages when a `v*` tag is pushed.
+See [docs/PUBLISHING.md](docs/PUBLISHING.md) for the feed URL and credentials.
+
 ## Status
 
 Version `0.1.0`. The API may change before `1.0.0`.

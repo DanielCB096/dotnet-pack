@@ -57,7 +57,7 @@ jobs:
         run: dotnet test PipelineKit.slnx -c Release --no-build
 
       - name: Publish x86 sample
-        run: dotnet publish samples/LegacyBridge/LegacyBridge.Control -c Release -r win-x86 --self-contained false -o publish-x86
+        run: dotnet publish samples/LegacyBridge/LegacyBridge.Control -c Release -r win-x86 --self-contained true -o publish-x86
 
       - name: Run x86 sample end to end
         shell: pwsh

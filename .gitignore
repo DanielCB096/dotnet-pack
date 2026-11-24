@@ -2,8 +2,10 @@ bin/
 obj/
 artifacts/
 publish-x86/
+publish-x86-sc/
 ci-data/
 ci-data-x86/
+ci-data-x86-sc/
 *.user
 *.suo
 .vs/

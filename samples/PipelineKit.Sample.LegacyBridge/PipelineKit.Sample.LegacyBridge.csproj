@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PipelineKit.Incremental\PipelineKit.Incremental.csproj" />
+    <ProjectReference Include="..\..\src\PipelineKit.Quality\PipelineKit.Quality.csproj" />
+    <ProjectReference Include="..\..\src\PipelineKit.Telemetry\PipelineKit.Telemetry.csproj" />
+    <ProjectReference Include="..\..\src\PipelineKit.Testing\PipelineKit.Testing.csproj" />
+  </ItemGroup>
+
+</Project>

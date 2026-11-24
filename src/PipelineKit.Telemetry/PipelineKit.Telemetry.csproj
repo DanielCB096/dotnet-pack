@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PipelineKit.Telemetry</PackageId>
+    <Description>OpenTelemetry-friendly ActivitySource and Meter conventions for batch pipelines.</Description>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PipelineKit.Testing</PackageId>
+    <Description>Test doubles and dirty-data helpers for PipelineKit pipelines.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PipelineKit.Incremental\PipelineKit.Incremental.csproj" />
+    <ProjectReference Include="..\PipelineKit.Quality\PipelineKit.Quality.csproj" />
+  </ItemGroup>
+
+</Project>

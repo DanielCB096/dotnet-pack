@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>PipelineKit.Quality</PackageId>
+    <Description>Data quality rules, quarantine, schema drift detection and reconciliation for .NET pipelines.</Description>
+  </PropertyGroup>
+
+</Project>

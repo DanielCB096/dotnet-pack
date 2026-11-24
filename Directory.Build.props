@@ -1,0 +1,25 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <IsPackable>false</IsPackable>
+    <Authors>PipelineKit contributors</Authors>
+    <Company>PipelineKit</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <Version>0.1.0</Version>
+    <PackageTags>etl;data;pipeline;incremental;quality;telemetry;dotnet</PackageTags>
+    <!-- TODO: update before publishing -->
+    <PackageProjectUrl>https://github.com/your-user/pipelinekit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/your-user/pipelinekit</RepositoryUrl>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/PipelineKit.Sample.LegacyBridge/PipelineKit.Sample.LegacyBridge.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/PipelineKit.AgentProtocol/PipelineKit.AgentProtocol.csproj" />
+    <Project Path="src/PipelineKit.Incremental/PipelineKit.Incremental.csproj" />
+    <Project Path="src/PipelineKit.Quality/PipelineKit.Quality.csproj" />
+    <Project Path="src/PipelineKit.Telemetry/PipelineKit.Telemetry.csproj" />
+    <Project Path="src/PipelineKit.Testing/PipelineKit.Testing.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PipelineKit.AgentProtocol.Tests/PipelineKit.AgentProtocol.Tests.csproj" />
+    <Project Path="tests/PipelineKit.Incremental.Tests/PipelineKit.Incremental.Tests.csproj" />
+    <Project Path="tests/PipelineKit.Quality.Tests/PipelineKit.Quality.Tests.csproj" />
+    <Project Path="tests/PipelineKit.Telemetry.Tests/PipelineKit.Telemetry.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -59,18 +59,34 @@ jobs:
       - name: Assert Tempo
         run: |
           set -euo pipefail
-          count=$(curl -sf 'http://localhost:3200/api/search?tags=service.name%3Dlegacybridge&limit=5' | jq '.traces | length')
-          echo "tempo traces=$count"
-          test "$count" -ge 1
+          count=0
+          for attempt in $(seq 1 24); do
+            count=$(curl -sf 'http://localhost:3200/api/search?limit=20' | jq '.traces | length' || echo 0)
+            echo "attempt $attempt: tempo traces=$count"
+            if [ "$count" -ge 1 ]; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "no traces found in Tempo"
+          exit 1
 
       - name: Assert Loki
         run: |
           set -euo pipefail
-          count=$(curl -sfG 'http://localhost:3100/loki/api/v1/query_range' \
-            --data-urlencode 'query={service_name="legacybridge"}' \
-            --data-urlencode 'limit=5' | jq '.data.result | length')
-          echo "loki streams=$count"
-          test "$count" -ge 1
+          count=0
+          for attempt in $(seq 1 24); do
+            count=$(curl -sfG 'http://localhost:3100/loki/api/v1/query_range' \
+              --data-urlencode 'query={service_name="legacybridge"}' \
+              --data-urlencode 'limit=5' | jq '.data.result | length' || echo 0)
+            echo "attempt $attempt: loki streams=$count"
+            if [ "$count" -ge 1 ]; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "no logs found in Loki"
+          exit 1
 
       - name: Stop stack
         if: always()

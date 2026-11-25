@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Stryker.NET mutation testing for Incremental and Quality, with `mutation` workflow.
+- DocFX documentation site deployed to GitHub Pages.
+- End-to-end observability CI (`observability` workflow) that runs the stack,
+  the sample and asserts Prometheus, Tempo and Loki data.
+- Demo storyboard and extra tests for hashing and extraction windows.
+
 ## [0.6.0] - 2026-11-25
 
 ### Added

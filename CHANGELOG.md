@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.0] - 2026-11-25
+
+### Added
+
+- RabbitMQ outbox publisher and idempotent `LegacyBridge.Consumer`.
+- `docker-compose.yml` with a durable RabbitMQ broker.
+- RabbitMQ end-to-end CI job and tests for publish failure and inbox idempotency.
+- Observability stack (Collector, Tempo, Prometheus, Loki, Grafana) and the
+  `PipelineKit pipelines` dashboard.
+- `AddPipelineKitOpenTelemetry` logging helper.
+- BenchmarkDotNet suites and benchmark results.
+- Architecture and code-guide documentation.
+- LegacyBridge integration tests and Windows `win-x86` CI job.
+
 ## [0.4.0] - 2026-11-24
 
 ### Added
@@ -9,18 +23,6 @@
 - LegacyBridge outbox: every batch writes an event in the same transaction and
   a relay publishes it to an NDJSON file. Second relay pass publishes zero.
 - CI generates, restores and runs the `dotnet new pipelinekit-job` template.
-
-## [Unreleased]
-
-### Added
-
-- Integration tests for the LegacyBridge pipeline: initial load, overlap
-  idempotency, mutation and hard-delete reconciliation.
-- Windows CI job that publishes and runs the sample as `win-x86`.
-- RabbitMQ outbox publisher and idempotent `LegacyBridge.Consumer`.
-- `docker-compose.yml` with a durable RabbitMQ broker.
-- RabbitMQ end-to-end CI job.
-- Tests for publish failure and consumer inbox idempotency.
 
 ## [0.3.0] - 2026-11-24
 

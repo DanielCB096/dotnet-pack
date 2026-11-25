@@ -173,6 +173,14 @@ debuggable with files, and works with a .NET Framework 4.8 x86 agent.
 Never use `order_id`, `customer_id` or other high-cardinality identifiers as
 metric labels. Put them in traces and logs.
 
+## Observability stack
+
+`observability/docker-compose.yml` runs Collector, Tempo, Prometheus, Loki and
+Grafana. Set `OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317` and the sample
+exports traces, metrics and logs through OTLP.
+
+The provisioned dashboard is `PipelineKit pipelines` (uid `pipelinekit`).
+
 ## Testing
 
 - Unit tests per package.

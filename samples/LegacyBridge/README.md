@@ -124,6 +124,23 @@ to simulate the 32-bit driver constraint:
 dotnet publish samples/LegacyBridge/LegacyBridge.Control -c Release -r win-x86 --self-contained false
 ```
 
+## Observability
+
+```bash
+docker compose -f observability/docker-compose.yml up -d
+
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 \
+  dotnet run --project samples/LegacyBridge/LegacyBridge.Control -c Release -- --reset
+```
+
+- Dashboard: http://localhost:3000/d/pipelinekit
+- Metrics: `pipeline_batches_total`, `pipeline_rows_extracted_total`,
+  `pipeline_rows_rejected_total`, `pipeline_duration_milliseconds_bucket`.
+- Logs: `{service_name="legacybridge"}`.
+- Traces: `{ resource.service.name = "legacybridge" }`.
+
+See [observability/README.md](../observability/README.md).
+
 ## Files
 
 | File | Purpose |

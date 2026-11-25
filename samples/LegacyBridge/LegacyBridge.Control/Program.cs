@@ -29,6 +29,9 @@ if (args.Contains("--agent"))
 }
 
 var options = ControlOptions.Parse(args);
+var otlpEndpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
+var useOtlp = !string.IsNullOrWhiteSpace(otlpEndpoint);
+var resource = PipelineTelemetryResource.Create("legacybridge", "0.5.0");
 
 using var loggerFactory = LoggerFactory.Create(builder =>
 {
@@ -38,21 +41,28 @@ using var loggerFactory = LoggerFactory.Create(builder =>
         console.TimestampFormat = "HH:mm:ss ";
     });
     builder.SetMinimumLevel(LogLevel.Information);
+
+    if (useOtlp)
+    {
+        builder.AddPipelineKitOpenTelemetry(logging => logging.SetResourceBuilder(resource));
+    }
 });
 
-var resource = PipelineTelemetryResource.Create("legacybridge", "0.3.0");
-
-using var tracerProvider = Sdk.CreateTracerProviderBuilder()
+var tracerBuilder = Sdk.CreateTracerProviderBuilder()
     .SetResourceBuilder(resource)
-    .AddPipelineKitTracing()
-    .AddPipelineKitConsoleExporter()
-    .Build();
+    .AddPipelineKitTracing();
+tracerBuilder = useOtlp
+    ? tracerBuilder.AddPipelineKitOtlpExporter()
+    : tracerBuilder.AddPipelineKitConsoleExporter();
+using var tracerProvider = tracerBuilder.Build();
 
-using var meterProvider = Sdk.CreateMeterProviderBuilder()
+var meterBuilder = Sdk.CreateMeterProviderBuilder()
     .SetResourceBuilder(resource)
-    .AddPipelineKitMetrics()
-    .AddPipelineKitConsoleExporter()
-    .Build();
+    .AddPipelineKitMetrics();
+meterBuilder = useOtlp
+    ? meterBuilder.AddPipelineKitOtlpExporter()
+    : meterBuilder.AddPipelineKitConsoleExporter();
+using var meterProvider = meterBuilder.Build();
 
 Console.WriteLine("LegacyBridge — ETL incremental con agente aislado");
 Console.WriteLine($"Datos: {options.DataDirectory}");

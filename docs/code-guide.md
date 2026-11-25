@@ -150,6 +150,12 @@ using var tracerProvider = Sdk.CreateTracerProviderBuilder()
     .Build();
 ```
 
+Set `OTEL_EXPORTER_OTLP_ENDPOINT` to send to a Collector. For logs:
+
+```csharp
+builder.AddPipelineKitOpenTelemetry();
+```
+
 ## Agent protocol
 
 The control writes a request and starts a child process:

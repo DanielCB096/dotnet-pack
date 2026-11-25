@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>PipelineKit.Benchmarks</AssemblyName>
+    <RootNamespace>PipelineKit.Benchmarks</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PipelineKit.Incremental\PipelineKit.Incremental.csproj" />
+    <ProjectReference Include="..\..\src\PipelineKit.Testing\PipelineKit.Testing.csproj" />
+  </ItemGroup>
+
+</Project>

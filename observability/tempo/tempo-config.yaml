@@ -1,0 +1,48 @@
+server:
+  http_listen_port: 3200
+  log_level: warn
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /var/tempo/blocks
+    wal:
+      path: /var/tempo/wal
+
+compactor:
+  compaction:
+    block_retention: 24h
+
+metrics_generator:
+  ring:
+    kvstore:
+      store: inmemory
+  traces_storage:
+    path: /var/tempo/generator/traces
+  storage:
+    path: /var/tempo/generator/wal
+    remote_write:
+      - url: http://prometheus:9090/api/v1/write
+        send_exemplars: true
+  processor:
+    local_blocks: {}
+    span_metrics: {}
+    service_graphs: {}
+
+overrides:
+  defaults:
+    metrics_generator:
+      processors: [local-blocks, span-metrics, service-graphs]
+
+usage_report:
+  reporting_enabled: false

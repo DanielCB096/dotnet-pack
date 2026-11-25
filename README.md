@@ -82,18 +82,20 @@ src/                  packages
 tests/                unit and integration tests
 samples/              LegacyBridge control and RabbitMQ consumer
 templates/            dotnet new template
+benchmarks/           BenchmarkDotNet suites
 docs/                 architecture, code guide and ADRs
+observability/        Collector, Tempo, Prometheus, Loki and Grafana
 docker-compose.yml    RabbitMQ for local end-to-end
 ```
 
 ## Template
 
 ```bash
-dotnet new install artifacts/PipelineKit.Templates.0.4.0.nupkg
+dotnet new install artifacts/PipelineKit.Templates.0.5.0.nupkg
 dotnet new pipelinekit-job -n MyPipeline
 ```
 
-From GitHub Packages, add the feed and install `PipelineKit.Templates::0.4.0`.
+From GitHub Packages, add the feed and install `PipelineKit.Templates::0.5.0`.
 See [templates/pipelinekit-job/README.md](templates/pipelinekit-job/README.md).
 
 ## Install from GitHub Packages
@@ -122,6 +124,36 @@ Management UI: http://localhost:15672 (`pipeline` / `pipeline`).
 The consumer stores processed message ids in SQLite, so duplicates are acked
 without being processed again.
 
+## Observability
+
+The sample can send traces, metrics and logs over OTLP. Start the stack:
+
+```bash
+docker compose -f observability/docker-compose.yml up -d
+```
+
+Then run the pipeline with:
+
+```bash
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 \
+  dotnet run --project samples/LegacyBridge/LegacyBridge.Control -c Release -- --reset
+```
+
+- Grafana: http://localhost:3000/d/pipelinekit
+- Prometheus: http://localhost:9090
+- Tempo: http://localhost:3200
+- Loki: http://localhost:3100
+
+See [observability/README.md](observability/README.md).
+
+## Benchmarks
+
+```bash
+dotnet run -c Release --project benchmarks/PipelineKit.Benchmarks
+```
+
+Results: [benchmarks/RESULTS.md](benchmarks/RESULTS.md).
+
 ## Documentation
 
 | Document | Content |
@@ -131,12 +163,13 @@ without being processed again.
 | [docs/code-guide.md](docs/code-guide.md) | Reading order, contracts, how to add a source, sink, rule or adapter |
 | [docs/PUBLISHING.md](docs/PUBLISHING.md) | Release process, GitHub Packages, template installation |
 | [docs/adr](docs/adr/README.md) | Architecture decision records |
+| [observability/README.md](observability/README.md) | Collector, Tempo, Prometheus, Loki and Grafana |
 | [samples/LegacyBridge/README.md](samples/LegacyBridge/README.md) | End-to-end sample walkthrough |
 | [templates/pipelinekit-job/README.md](templates/pipelinekit-job/README.md) | Generated job template |
 
 ## Status
 
-Version `0.4.0`. The API may change before `1.0.0`.
+Version `0.5.0`. The API may change before `1.0.0`.
 
 Verified locally:
 
@@ -147,6 +180,8 @@ Verified locally:
 - `LegacyBridge` end-to-end sample runs against a simulated legacy database.
 - `LegacyBridge` publishes an outbox event per batch and relays it exactly once.
 - RabbitMQ end-to-end job publishes three events and consumes them idempotently.
+- OTLP stack verified: traces in Tempo, metrics in Prometheus, logs in Loki.
+- Grafana dashboard `PipelineKit pipelines` has 9 panels.
 - `LegacyBridge` is published and executed as `win-x86` in CI.
 - `dotnet new pipelinekit-job` generates a runnable project.
 

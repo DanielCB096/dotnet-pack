@@ -1,5 +1,7 @@
 # Documentation
 
+Online: https://danielcb096.github.io/dotnet-pack/
+
 | Document | Content |
 |---|---|
 | [architecture.md](architecture.md) | Package map, runtime flow, checkpoint semantics, outbox, agent isolation |

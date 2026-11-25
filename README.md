@@ -198,6 +198,8 @@ Results: [benchmarks/RESULTS.md](benchmarks/RESULTS.md).
 
 ## Documentation
 
+Online: https://danielcb096.github.io/dotnet-pack/
+
 | Document | Content |
 |---|---|
 | [docs/README.md](docs/README.md) | Documentation index |

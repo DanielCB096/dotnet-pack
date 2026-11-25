@@ -49,7 +49,22 @@ public sealed class PipelineHost
             TryDelete(_options.WarehouseDbPath);
         }
 
-        await new LegacyDatabase(_options.LegacyDbPath).InitializeAsync(_options.Reset, ct);
+        var legacy = new LegacyDatabase(_options.LegacyDbPath);
+        await legacy.InitializeAsync(_options.Reset, ct);
+
+        var actualSchema = await legacy.GetSchemaAsync(ct);
+        var drift = SchemaDriftDetector.Detect(LegacyDatabase.ExpectedSchema, actualSchema);
+        if (drift.HasChanges)
+        {
+            var details = string.Join(
+                "; ",
+                drift.Changes.Select(change =>
+                    $"{change.Kind}: {change.Column} ({change.Expected} -> {change.Actual})"));
+            throw new InvalidOperationException($"Legacy schema drift detected: {details}");
+        }
+
+        _logger.LogInformation("Preflight OK: legacy schema matches the expected columns.");
+
         await WarehouseSchema.EnsureAsync(_options.WarehouseDbPath, ct);
         await _checkpoints.EnsureSchemaAsync(ct);
     }

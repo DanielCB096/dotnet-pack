@@ -31,7 +31,7 @@ if (args.Contains("--agent"))
 var options = ControlOptions.Parse(args);
 var otlpEndpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
 var useOtlp = !string.IsNullOrWhiteSpace(otlpEndpoint);
-var resource = PipelineTelemetryResource.Create("legacybridge", "0.5.0");
+var resource = PipelineTelemetryResource.Create("legacybridge", "0.6.0");
 
 using var loggerFactory = LoggerFactory.Create(builder =>
 {
@@ -64,7 +64,7 @@ meterBuilder = useOtlp
     : meterBuilder.AddPipelineKitConsoleExporter();
 using var meterProvider = meterBuilder.Build();
 
-Console.WriteLine("LegacyBridge — ETL incremental con agente aislado");
+Console.WriteLine("LegacyBridge â€” ETL incremental con agente aislado");
 Console.WriteLine($"Datos: {options.DataDirectory}");
 Console.WriteLine();
 
@@ -79,7 +79,7 @@ Console.WriteLine("Legado modificado: orden 2 actualizada, orden 9 insertada, or
 Print("Run 3 (incremental)", await host.RunAsync());
 
 var reconciled = await host.ReconcileDeletesAsync();
-Console.WriteLine($"Reconciliación de borrados: {reconciled} fila(s) marcadas como eliminadas.");
+Console.WriteLine($"ReconciliaciÃ³n de borrados: {reconciled} fila(s) marcadas como eliminadas.");
 
 var rabbit = RabbitMqOptions.FromEnvironment();
 IOutboxPublisher publisher = rabbit is null
@@ -123,3 +123,4 @@ static void Print(string label, IncrementalResult result) =>
         $"unchanged={result.RowsUnchanged}, rejected={result.RowsRejected}, batch={result.BatchId}");
 
 return 0;
+

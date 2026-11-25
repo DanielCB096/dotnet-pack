@@ -5,6 +5,7 @@ using LegacyBridge.Control;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using PipelineKit.Incremental;
+using PipelineKit.Quality;
 using PipelineKit.Testing;
 using Xunit;
 
@@ -150,6 +151,24 @@ public sealed class PipelineIntegrationTests : IDisposable
         await store.MarkProcessedAsync("message-1", DateTimeOffset.UtcNow);
 
         Assert.True(await store.IsProcessedAsync("message-1"));
+    }
+
+    [Fact]
+    public async Task Preflight_accepts_the_seeded_schema()
+    {
+        var legacy = new LegacyDatabase(Path.Combine(_dataDirectory, "legacy.db"));
+        await legacy.InitializeAsync(reset: true);
+
+        var drift = SchemaDriftDetector.Detect(
+            LegacyDatabase.ExpectedSchema,
+            await legacy.GetSchemaAsync());
+
+        Assert.False(
+            drift.HasChanges,
+            string.Join(
+                "; ",
+                drift.Changes.Select(change =>
+                    $"{change.Kind}: {change.Column} ({change.Expected} -> {change.Actual})")));
     }
 
     public void Dispose()

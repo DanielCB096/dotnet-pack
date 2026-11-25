@@ -54,6 +54,21 @@ public sealed class EfCoreCheckpointStoreTests : IDisposable
         Assert.Equal(2, checkpoint!.LastKey);
     }
 
+    [Fact]
+    public async Task Concurrent_commits_do_not_throw()
+    {
+        var store = await CreateStoreAsync();
+
+        await Task.WhenAll(
+            store.CommitAsync(Key(), new Checkpoint(1)),
+            store.CommitAsync(Key(), new Checkpoint(2)));
+
+        var checkpoint = await store.GetAsync(Key());
+
+        Assert.NotNull(checkpoint);
+        Assert.Contains(checkpoint!.LastKey, new long?[] { 1, 2 });
+    }
+
     public void Dispose()
     {
         SqliteConnection.ClearAllPools();

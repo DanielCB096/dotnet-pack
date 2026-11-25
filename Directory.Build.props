@@ -15,7 +15,7 @@
     <Company>PipelineKit</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <PackageTags>etl;data;pipeline;incremental;quality;telemetry;dotnet</PackageTags>
     <!-- TODO: update before publishing -->
     <PackageProjectUrl>https://github.com/DanielCB096/dotnet-pack</PackageProjectUrl>

@@ -15,7 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="pipelinekit-job\**\*" Exclude="pipelinekit-job\**\bin\**;pipelinekit-job\**\obj\**" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <Content Include="pipelinekit-job\**\*" Pack="true" Exclude="pipelinekit-job\**\bin\**;pipelinekit-job\**\obj\**" />
     <Compile Remove="pipelinekit-job\**\*.cs" />
     <None Remove="pipelinekit-job\**\*" />
   </ItemGroup>

@@ -24,15 +24,33 @@ jobs:
       - name: Build
         run: dotnet build PipelineKit.slnx -c Release --no-restore
 
-      - name: Test
-        run: dotnet test PipelineKit.slnx -c Release --no-build
+      - name: Format check
+        run: dotnet format PipelineKit.slnx --verify-no-changes --no-restore
+
+      - name: Vulnerable packages
+        run: dotnet list PipelineKit.slnx package --vulnerable --include-transitive
+
+      - name: Test with coverage
+        run: dotnet test PipelineKit.slnx -c Release --no-build --collect:"XPlat Code Coverage" --results-directory TestResults
+
+      - name: Coverage summary
+        run: |
+          dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.6.1
+          reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:coverage -reporttypes:"MarkdownSummaryGithub;Cobertura"
+          cat coverage/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/**
 
       - name: Pack
         run: dotnet pack PipelineKit.slnx -c Release --no-build -o artifacts
 
       - name: Test dotnet new template
         run: |
-          dotnet new install artifacts/PipelineKit.Templates.0.5.0.nupkg
+          dotnet new install artifacts/PipelineKit.Templates.0.6.0.nupkg
           dotnet new pipelinekit-job -n CiTemplate -o /tmp/ci-template
           dotnet restore /tmp/ci-template/CiTemplate.csproj \
             --source "$PWD/artifacts" \
@@ -125,3 +143,4 @@ jobs:
           for i in 1 2 3; do
             dotnet run --project samples/LegacyBridge.Consumer -c Release --no-build -- --once
           done
+

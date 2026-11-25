@@ -1,6 +1,8 @@
 bin/
 obj/
 artifacts/
+artifacts-test/
+coverage/
 publish-x86/
 publish-x86-sc/
 ci-data/

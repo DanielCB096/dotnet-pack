@@ -1,4 +1,5 @@
 using Microsoft.Data.Sqlite;
+using PipelineKit.Quality;
 
 namespace LegacyBridge.Control;
 
@@ -132,6 +133,44 @@ public sealed class LegacyDatabase(string path)
 
         return rows;
     }
+
+    /// <summary>Reads the actual SQLite schema for the preflight check.</summary>
+    public async Task<SchemaSnapshot> GetSchemaAsync(CancellationToken ct = default)
+    {
+        var columns = new List<SchemaColumn>();
+        await using var connection = new SqliteConnection($"Data Source={Path}");
+        await connection.OpenAsync(ct);
+        await using var command = connection.CreateCommand();
+        command.CommandText = "pragma table_info(orders);";
+        await using var reader = await command.ExecuteReaderAsync(ct);
+        while (await reader.ReadAsync(ct))
+        {
+            var isPrimaryKey = reader.GetInt32(5) != 0;
+            var isNotNull = reader.GetInt32(3) != 0 || isPrimaryKey;
+
+            columns.Add(new SchemaColumn(
+                reader.GetString(1),
+                reader.GetString(2).ToUpperInvariant(),
+                MaxLength: null,
+                IsNullable: !isNotNull));
+        }
+
+        return new SchemaSnapshot(columns);
+    }
+
+    /// <summary>Schema the sample expects; drift fails the preflight.</summary>
+    public static SchemaSnapshot ExpectedSchema { get; } = new(
+    [
+        new SchemaColumn("order_id", "INTEGER", IsNullable: false),
+        new SchemaColumn("country", "TEXT", IsNullable: false),
+        new SchemaColumn("customer_id", "TEXT", IsNullable: false),
+        new SchemaColumn("product_code", "TEXT", IsNullable: false),
+        new SchemaColumn("quantity", "INTEGER", IsNullable: false),
+        new SchemaColumn("unit_price", "REAL", IsNullable: false),
+        new SchemaColumn("status", "TEXT", IsNullable: false),
+        new SchemaColumn("updated_at", "TEXT", IsNullable: false),
+        new SchemaColumn("is_deleted", "INTEGER", IsNullable: false),
+    ]);
 
     private static async Task ExecuteAsync(SqliteConnection connection, string sql, CancellationToken ct)
     {

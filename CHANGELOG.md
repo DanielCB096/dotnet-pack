@@ -1,11 +1,19 @@
 # Changelog
 
-## [Unreleased]
+## [0.6.0] - 2026-11-25
 
 ### Added
 
+- Per-package README files packed into every NuGet package.
+- SourceLink, symbol packages (`.snupkg`) and a package icon.
+- Coverlet coverage, ReportGenerator summary and coverage artifact in CI.
+- `dotnet format --verify-no-changes` and vulnerable-package checks in CI.
+- Dependabot, CONTRIBUTING, SECURITY, issue templates, PR template and CODEOWNERS.
+- ADRs for the outbox, Trusted Publishing and the observability stack.
+- Streaming NDJSON in `AgentIncrementalSource`.
+- EF Core checkpoint commit retry for concurrent writers, with a test.
+- LegacyBridge schema preflight and a schema-drift test.
 - Dashboard screenshot in the README and observability guide.
-- Manual `nuget-publish` workflow and NuGet.org instructions.
 - NuGet.org install commands for all packages and the template.
 
 ## [0.5.0] - 2026-11-25

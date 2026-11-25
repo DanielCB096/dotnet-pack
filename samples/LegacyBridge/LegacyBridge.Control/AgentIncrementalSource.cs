@@ -8,7 +8,7 @@ namespace LegacyBridge.Control;
 
 /// <summary>
 /// PipelineKit source that runs the extraction in a separate agent process.
-/// The sample materializes the batch; a production source should stream it.
+/// The NDJSON output is streamed line by line; the batch is not materialized.
 /// </summary>
 public sealed class AgentIncrementalSource(string legacyDbPath, string agentExecutable)
     : IIncrementalSource
@@ -17,28 +17,62 @@ public sealed class AgentIncrementalSource(string legacyDbPath, string agentExec
         ExtractionWindow window,
         [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken ct = default)
     {
-        var rows = await QueryAsync(BuildQuery(window), ct).ConfigureAwait(false);
+        var outputPath = await RunAgentAsync(BuildQuery(window), ct).ConfigureAwait(false);
 
-        foreach (var values in rows)
+        try
         {
-            ct.ThrowIfCancellationRequested();
-            yield return ToSourceRow(values);
+            await using var stream = OpenRead(outputPath);
+            using var reader = new StreamReader(stream);
+
+            while (await reader.ReadLineAsync(ct).ConfigureAwait(false) is { } line)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+
+                yield return ToSourceRow(ParseLine(line));
+            }
+        }
+        finally
+        {
+            TryDelete(outputPath);
         }
     }
 
     public async Task<IReadOnlySet<long>> ReadKeysAsync(CancellationToken ct = default)
     {
-        var rows = await QueryAsync("select order_id from orders order by order_id;", ct)
+        var outputPath = await RunAgentAsync(
+                "select order_id from orders order by order_id;",
+                ct)
             .ConfigureAwait(false);
 
-        return rows
-            .Select(values => Convert.ToInt64(values["order_id"], CultureInfo.InvariantCulture))
-            .ToHashSet();
+        try
+        {
+            var keys = new HashSet<long>();
+            await using var stream = OpenRead(outputPath);
+            using var reader = new StreamReader(stream);
+
+            while (await reader.ReadLineAsync(ct).ConfigureAwait(false) is { } line)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+
+                var values = ParseLine(line);
+                keys.Add(Convert.ToInt64(values["order_id"], CultureInfo.InvariantCulture));
+            }
+
+            return keys;
+        }
+        finally
+        {
+            TryDelete(outputPath);
+        }
     }
 
-    private async Task<IReadOnlyList<Dictionary<string, object?>>> QueryAsync(
-        string query,
-        CancellationToken ct)
+    private async Task<string> RunAgentAsync(string query, CancellationToken ct)
     {
         var outputDirectory = Path.Combine(Path.GetTempPath(), "legacybridge");
         Directory.CreateDirectory(outputDirectory);
@@ -62,40 +96,23 @@ public sealed class AgentIncrementalSource(string legacyDbPath, string agentExec
                     $"The legacy agent failed with exit code {result.ExitCode}: {result.Error}");
             }
 
-            var rows = new List<Dictionary<string, object?>>();
-            foreach (var line in File.ReadLines(outputPath))
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    continue;
-                }
-
-                using var document = JsonDocument.Parse(line);
-                var values = new Dictionary<string, object?>(StringComparer.Ordinal);
-                foreach (var property in document.RootElement.EnumerateObject())
-                {
-                    values[property.Name] = ToClr(property.Value);
-                }
-
-                rows.Add(values);
-            }
-
-            return rows;
+            return outputPath;
         }
-        finally
+        catch
         {
-            try
-            {
-                if (File.Exists(outputPath))
-                {
-                    File.Delete(outputPath);
-                }
-            }
-            catch (IOException)
-            {
-            }
+            TryDelete(outputPath);
+            throw;
         }
     }
+
+    private static FileStream OpenRead(string path) =>
+        new(
+            path,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.Read,
+            bufferSize: 4096,
+            useAsync: true);
 
     private AgentProcessHost CreateHost()
     {
@@ -149,6 +166,18 @@ public sealed class AgentIncrementalSource(string legacyDbPath, string agentExec
         return sql + " order by order_id;";
     }
 
+    private static Dictionary<string, object?> ParseLine(string line)
+    {
+        using var document = JsonDocument.Parse(line);
+        var values = new Dictionary<string, object?>(StringComparer.Ordinal);
+        foreach (var property in document.RootElement.EnumerateObject())
+        {
+            values[property.Name] = ToClr(property.Value);
+        }
+
+        return values;
+    }
+
     private static SourceRow ToSourceRow(IReadOnlyDictionary<string, object?> values)
     {
         var orderId = Convert.ToInt64(values["order_id"], CultureInfo.InvariantCulture);
@@ -177,4 +206,18 @@ public sealed class AgentIncrementalSource(string legacyDbPath, string agentExec
             JsonValueKind.Null => null,
             _ => element.GetRawText(),
         };
+
+    private static void TryDelete(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+        catch (IOException)
+        {
+        }
+    }
 }

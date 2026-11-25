@@ -61,12 +61,37 @@ public sealed class EfCoreCheckpointStore<TContext> : ICheckpointStore
             set.Add(record);
         }
 
+        Apply(record, checkpoint);
+
+        try
+        {
+            await db.SaveChangesAsync(ct).ConfigureAwait(false);
+        }
+        catch (DbUpdateException)
+        {
+            // Another writer inserted the same checkpoint key between our read
+            // and our insert. Re-read and update instead of failing the batch.
+            db.ChangeTracker.Clear();
+            var existing = await set
+                .FirstOrDefaultAsync(Match(key), ct)
+                .ConfigureAwait(false);
+
+            if (existing is null)
+            {
+                throw;
+            }
+
+            Apply(existing, checkpoint);
+            await db.SaveChangesAsync(ct).ConfigureAwait(false);
+        }
+    }
+
+    private static void Apply(CheckpointRecord record, Checkpoint checkpoint)
+    {
         record.LastKey = checkpoint.LastKey;
         record.LastModified = checkpoint.LastModified;
         record.Period = checkpoint.Period;
         record.RowHash = checkpoint.RowHash;
-
-        await db.SaveChangesAsync(ct).ConfigureAwait(false);
     }
 
     private static Expression<Func<CheckpointRecord, bool>> Match(CheckpointKey key) =>

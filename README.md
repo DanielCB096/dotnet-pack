@@ -1,5 +1,13 @@
 # PipelineKit
 
+[![CI](https://github.com/DanielCB096/dotnet-pack/actions/workflows/ci.yml/badge.svg)](https://github.com/DanielCB096/dotnet-pack/actions/workflows/ci.yml)
+[![NuGet](https://img.shields.io/nuget/v/PipelineKit.Incremental)](https://www.nuget.org/packages/PipelineKit.Incremental)
+[![Downloads](https://img.shields.io/nuget/dt/PipelineKit.Incremental)](https://www.nuget.org/packages/PipelineKit.Incremental)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://dotnet.microsoft.com)
+[![Tests](https://img.shields.io/badge/tests-33%2F33-brightgreen)](https://github.com/DanielCB096/dotnet-pack/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-65.5%25-yellow)](https://github.com/DanielCB096/dotnet-pack/actions/workflows/ci.yml)
+
 Reusable .NET building blocks for **incremental, observable and testable data pipelines**.
 
 PipelineKit is not an ETL framework. It is a small set of packages that solve the
@@ -91,31 +99,31 @@ docker-compose.yml    RabbitMQ for local end-to-end
 ## Template
 
 ```bash
-dotnet new install PipelineKit.Templates::0.5.0
+dotnet new install PipelineKit.Templates::0.6.0
 dotnet new pipelinekit-job -n MyPipeline
 ```
 
-Desde el paquete local, si estás desarrollando el repo:
+Desde el paquete local, si estÃ¡s desarrollando el repo:
 
 ```bash
-dotnet new install artifacts/PipelineKit.Templates.0.5.0.nupkg
+dotnet new install artifacts/PipelineKit.Templates.0.6.0.nupkg
 ```
 
 See [templates/pipelinekit-job/README.md](templates/pipelinekit-job/README.md).
 
 ## Install from NuGet.org
 
-All packages are published as `0.5.0`:
+All packages are published as `0.6.0`:
 
 ```bash
-dotnet add package PipelineKit.Incremental --version 0.5.0
-dotnet add package PipelineKit.Incremental.Sqlite --version 0.5.0
-dotnet add package PipelineKit.Incremental.EntityFrameworkCore --version 0.5.0
-dotnet add package PipelineKit.Quality --version 0.5.0
-dotnet add package PipelineKit.Telemetry --version 0.5.0
-dotnet add package PipelineKit.Telemetry.OpenTelemetry --version 0.5.0
-dotnet add package PipelineKit.AgentProtocol --version 0.5.0
-dotnet add package PipelineKit.Testing --version 0.5.0
+dotnet add package PipelineKit.Incremental --version 0.6.0
+dotnet add package PipelineKit.Incremental.Sqlite --version 0.6.0
+dotnet add package PipelineKit.Incremental.EntityFrameworkCore --version 0.6.0
+dotnet add package PipelineKit.Quality --version 0.6.0
+dotnet add package PipelineKit.Telemetry --version 0.6.0
+dotnet add package PipelineKit.Telemetry.OpenTelemetry --version 0.6.0
+dotnet add package PipelineKit.AgentProtocol --version 0.6.0
+dotnet add package PipelineKit.Testing --version 0.6.0
 ```
 
 - https://www.nuget.org/packages/PipelineKit.Incremental
@@ -185,7 +193,7 @@ Results: [benchmarks/RESULTS.md](benchmarks/RESULTS.md).
 | Document | Content |
 |---|---|
 | [docs/README.md](docs/README.md) | Documentation index |
-| [docs/como-funciona.md](docs/como-funciona.md) | Explicación completa del funcionamiento, con analogías y flujo |
+| [docs/como-funciona.md](docs/como-funciona.md) | ExplicaciÃ³n completa del funcionamiento, con analogÃ­as y flujo |
 | [docs/incremental-runner.md](docs/incremental-runner.md) | Deep dive del runner: checkpoint, ventana y commit |
 | [docs/architecture.md](docs/architecture.md) | Package map, runtime flow, checkpoint semantics, outbox, agent isolation |
 | [docs/code-guide.md](docs/code-guide.md) | Reading order, contracts, how to add a source, sink, rule or adapter |
@@ -197,14 +205,14 @@ Results: [benchmarks/RESULTS.md](benchmarks/RESULTS.md).
 
 ## Status
 
-Version `0.5.0`. The API may change before `1.0.0`.
+Version `0.6.0`. The API may change before `1.0.0`.
 
 Verified locally:
 
 - `dotnet build`: 0 warnings, 0 errors.
-- `dotnet test`: **31/31 tests** across 8 test projects.
-- `dotnet pack`: 9 packages, including `netstandard2.0` and `net10.0` assets
-  for `PipelineKit.AgentProtocol`.
+- `dotnet test`: **33/33 tests** across 8 test projects.
+- Coverage: **65.5% lines / 53.1% branches** (Coverlet + ReportGenerator).
+- `dotnet pack`: 9 packages with SourceLink, README and `.snupkg` symbols, including `netstandard2.0` and `net10.0` assets for `PipelineKit.AgentProtocol`.
 - `LegacyBridge` end-to-end sample runs against a simulated legacy database.
 - `LegacyBridge` publishes an outbox event per batch and relays it exactly once.
 - RabbitMQ end-to-end job publishes three events and consumes them idempotently.
@@ -212,7 +220,7 @@ Verified locally:
 - Grafana dashboard `PipelineKit pipelines` has 9 panels.
 - `LegacyBridge` is published and executed as `win-x86` in CI.
 - `dotnet new pipelinekit-job` generates a runnable project.
-- The 9 packages are published on NuGet.org as `0.5.0` via Trusted Publishing.
+- The 9 packages are published on NuGet.org as `0.6.0` via Trusted Publishing.
 
 Before publishing, update `PackageProjectUrl` and `RepositoryUrl` in
 `Directory.Build.props` with your GitHub repository.
@@ -245,3 +253,4 @@ dotnet run --project samples/LegacyBridge/LegacyBridge.Control -c Release -- --r
 ## License
 
 MIT.
+

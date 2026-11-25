@@ -130,3 +130,11 @@ $env:NUGET_API_KEY = "TU_API_KEY"
 ```
 
 Los IDs `PipelineKit.*` están libres en NuGet.org a la fecha de esta guía.
+
+### Consumir desde NuGet.org
+
+```bash
+dotnet add package PipelineKit.Incremental --version 0.5.0
+dotnet add package PipelineKit.Telemetry.OpenTelemetry --version 0.5.0
+dotnet new install PipelineKit.Templates::0.5.0
+```

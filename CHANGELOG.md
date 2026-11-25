@@ -6,6 +6,7 @@
 
 - Dashboard screenshot in the README and observability guide.
 - Manual `nuget-publish` workflow and NuGet.org instructions.
+- NuGet.org install commands for all packages and the template.
 
 ## [0.5.0] - 2026-11-25
 

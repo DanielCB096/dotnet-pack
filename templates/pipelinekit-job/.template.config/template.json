@@ -17,12 +17,12 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "net10.0",
-          "description": ".NET 10 LTS"
+          "choice": "net11.0",
+          "description": ".NET 11"
         }
       ],
-      "defaultValue": "net10.0",
-      "replaces": "net10.0"
+      "defaultValue": "net11.0",
+      "replaces": "net11.0"
     }
   }
 }

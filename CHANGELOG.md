@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.8.0] - 2026-11-25
+
+### Changed
+
+- Migrated all projects to `net11.0` and .NET SDK `11.0.100`.
+- Updated EF Core, `Microsoft.Extensions.*`, `Microsoft.Data.Sqlite`,
+  `System.Text.Json` and `Microsoft.SourceLink.GitHub` to the 11.0 wave.
+- `PipelineKit.AgentProtocol` now targets `netstandard2.0` and `net11.0`.
+- The `pipelinekit-job` template now generates `net11.0` projects.
+- CI, packaging and documentation use the .NET 11 SDK.
+
+### Breaking
+
+- Packages no longer include `net10.0` assets. Applications must target
+  `net11.0` or later to consume this release.
+
 ## [0.7.0] - 2026-11-25
 
 ### Added

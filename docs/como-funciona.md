@@ -171,15 +171,15 @@ rechazadas, fallos, duración p95, tabla por pipeline y logs.
 
 | Benchmark | Filas | Tiempo | Memoria |
 |---|---:|---:|---:|
-| Hash de 10 campos | — | 1.038 µs | 2.38 KB |
-| Runner completo | 1,000 | 17.20 ms | 2.01 MB |
-| Runner completo | 10,000 | 178.91 ms | 20.51 MB |
+| Hash de 10 campos | — | 2.067 µs | 2.38 KB |
+| Runner completo | 1,000 | 3.642 ms | 2.00 MB |
+| Runner completo | 10,000 | 41.16 ms | 20.36 MB |
 
 ## CI/CD
 
 En cada push:
 
-1. **build-test-pack**: compila, ejecuta 31 tests, empaqueta y prueba la
+1. **build-test-pack**: compila, ejecuta 65 tests, empaqueta y prueba la
    plantilla.
 2. **windows-x86**: publica el ejemplo x86 autocontenido y lo ejecuta.
 3. **rabbitmq-e2e**: publica y consume eventos con RabbitMQ.

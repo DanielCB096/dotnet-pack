@@ -16,7 +16,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: "10.0.x"
+          dotnet-version: "11.0.x"
 
       - name: Restore
         run: dotnet restore PipelineKit.slnx --configfile NuGet.Config
@@ -50,7 +50,7 @@ jobs:
 
       - name: Test dotnet new template
         run: |
-          dotnet new install artifacts/PipelineKit.Templates.0.7.0.nupkg
+          dotnet new install artifacts/PipelineKit.Templates.0.8.0.nupkg
           dotnet new pipelinekit-job -n CiTemplate -o /tmp/ci-template
           dotnet restore /tmp/ci-template/CiTemplate.csproj \
             --source "$PWD/artifacts" \
@@ -74,7 +74,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: "10.0.x"
+          dotnet-version: "11.0.x"
 
       - name: Restore
         run: dotnet restore PipelineKit.slnx --configfile NuGet.Config
@@ -116,7 +116,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: "10.0.x"
+          dotnet-version: "11.0.x"
 
       - name: Restore
         run: dotnet restore PipelineKit.slnx --configfile NuGet.Config

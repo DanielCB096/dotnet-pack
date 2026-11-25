@@ -12,7 +12,7 @@ It is deliberately not a framework: you compose the pieces you need.
    separate from the core.
 4. **Streaming first.** Large sources must not be materialized in memory.
 5. **Observable by default.** Stable trace and metric names for batches.
-6. **Legacy-friendly.** The same contract works on .NET 10 and on a 32-bit
+6. **Legacy-friendly.** The same contract works on .NET 11 and on a 32-bit
    .NET Framework agent when a legacy driver forces it.
 
 ## Package map
@@ -41,7 +41,7 @@ flowchart TB
 ```
 
 `AgentProtocol` has no dependency on the other packages. It targets
-`netstandard2.0` and `net10.0`.
+`netstandard2.0` and `net11.0`.
 
 ## Runtime flow
 

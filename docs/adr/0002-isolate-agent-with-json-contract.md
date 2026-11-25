@@ -13,7 +13,7 @@ it introduces a contract between two architectures.
 - The process exits with a stable code.
 - The host enforces a timeout and kills the process tree.
 - The contract lives in `PipelineKit.AgentProtocol` and targets
-  `netstandard2.0` and `net10.0`.
+  `netstandard2.0` and `net11.0`.
 
 ## Consequences
 

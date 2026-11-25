@@ -9,12 +9,12 @@ $inputFile = Join-Path (Get-Location) $SourcePath
 $outputFile = Join-Path (Get-Location) $OutputPath
 $img = [System.Drawing.Image]::FromFile($inputFile)
 
-$canvasWidth = 1600
-$canvasHeight = 900
+$canvasWidth = 1120
+$canvasHeight = 880
 $panelWidth = 500
-$panelHeight = 715
-$top = 105
-$gap = 28
+$left = 40
+$right = $left + $panelWidth + 40
+$top = 110
 
 $canvas = New-Object System.Drawing.Bitmap $canvasWidth, $canvasHeight
 $graphics = [System.Drawing.Graphics]::FromImage($canvas)
@@ -29,22 +29,34 @@ $muted = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(1
 $accent = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(56, 189, 248))
 
 $graphics.DrawString("PipelineKit", $titleFont, $accent, 40, 25)
-$graphics.DrawString("demo walkthrough - dashboard, metrics and logs", $labelFont, $muted, 42, 70)
+$graphics.DrawString("demo walkthrough - dashboard, metrics and logs", $labelFont, $muted, 42, 72)
 
-$crops = @(
-    [System.Drawing.Rectangle]::new(0, 0, $img.Width, $img.Height),
-    [System.Drawing.Rectangle]::new(0, 0, $img.Width, [int]($img.Height * 0.55)),
-    [System.Drawing.Rectangle]::new(0, [int]($img.Height * 0.55), $img.Width, [int]($img.Height * 0.45))
-)
+function Draw-Panel {
+    param(
+        [System.Drawing.Rectangle]$Crop,
+        [int]$X,
+        [int]$Y,
+        [string]$Label
+    )
 
-$labels = @("1. Dashboard", "2. Metrics", "3. Logs")
-
-for ($index = 0; $index -lt $crops.Count; $index++) {
-    $x = 40 + $index * ($panelWidth + $gap)
-    $destination = New-Object System.Drawing.Rectangle $x, $top, $panelWidth, $panelHeight
-    $graphics.DrawImage($img, $destination, $crops[$index], [System.Drawing.GraphicsUnit]::Pixel)
-    $graphics.DrawString($labels[$index], $labelFont, $white, $x, $top + $panelHeight + 12)
+    $scale = $panelWidth / $Crop.Width
+    $height = [int]($Crop.Height * $scale)
+    $destination = New-Object System.Drawing.Rectangle $X, $Y, $panelWidth, $height
+    $graphics.DrawImage($img, $destination, $Crop, [System.Drawing.GraphicsUnit]::Pixel)
+    $graphics.DrawString($Label, $labelFont, $white, $X, $Y + $height + 12)
+    return $height
 }
+
+$full = [System.Drawing.Rectangle]::new(0, 0, $img.Width, $img.Height)
+$metrics = [System.Drawing.Rectangle]::new(0, [int]($img.Height * 0.10), $img.Width, [int]($img.Height * 0.46))
+$logsTop = [int]($img.Height * 0.57)
+$logs = [System.Drawing.Rectangle]::new(0, $logsTop, $img.Width, $img.Height - $logsTop)
+
+Draw-Panel -Crop $full -X $left -Y $top -Label "1. Dashboard" | Out-Null
+
+$metricsHeight = Draw-Panel -Crop $metrics -X $right -Y $top -Label "2. Metrics"
+$logsY = $top + $metricsHeight + 50
+Draw-Panel -Crop $logs -X $right -Y $logsY -Label "3. Logs" | Out-Null
 
 $graphics.Dispose()
 $canvas.Save($outputFile, [System.Drawing.Imaging.ImageFormat]::Png)

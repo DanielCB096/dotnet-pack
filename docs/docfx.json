@@ -1,0 +1,24 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": ["*.md", "adr/*.md"],
+        "src": ".",
+        "dest": "."
+      }
+    ],
+    "resource": [
+      {
+        "files": ["capturas/**"],
+        "src": ".",
+        "dest": "."
+      }
+    ],
+    "output": "_site",
+    "template": ["default", "modern"],
+    "globalMetadata": {
+      "_appTitle": "PipelineKit",
+      "_appFooter": "PipelineKit — incremental data pipelines for .NET"
+    }
+  }
+}

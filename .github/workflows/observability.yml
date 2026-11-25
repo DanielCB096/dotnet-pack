@@ -1,0 +1,77 @@
+name: observability
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore PipelineKit.slnx --configfile NuGet.Config
+
+      - name: Build sample
+        run: dotnet build samples/LegacyBridge/LegacyBridge.Control -c Release --no-restore
+
+      - name: Start stack
+        run: docker compose -f observability/docker-compose.yml up -d
+
+      - name: Wait for stack
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 40); do
+            if curl -sf http://localhost:13133/ >/dev/null \
+              && curl -sf http://localhost:9090/-/ready >/dev/null \
+              && curl -sf http://localhost:3000/api/health >/dev/null \
+              && curl -sf http://localhost:3200/ready >/dev/null; then
+              echo "stack ready"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "stack did not become ready"
+          docker compose -f observability/docker-compose.yml ps
+          exit 1
+
+      - name: Run pipeline with OTLP
+        env:
+          OTEL_EXPORTER_OTLP_ENDPOINT: http://localhost:4317
+          OTEL_METRIC_EXPORT_INTERVAL: "2000"
+        run: dotnet run --project samples/LegacyBridge/LegacyBridge.Control -c Release --no-build -- --reset
+
+      - name: Assert Prometheus
+        run: |
+          set -euo pipefail
+          sleep 8
+          value=$(curl -sf 'http://localhost:9090/api/v1/query?query=sum(pipeline_batches_total)' | jq -r '.data.result[0].value[1]')
+          echo "pipeline_batches_total=$value"
+          test "$value" -ge 3
+
+      - name: Assert Tempo
+        run: |
+          set -euo pipefail
+          count=$(curl -sf 'http://localhost:3200/api/search?tags=service.name%3Dlegacybridge&limit=5' | jq '.traces | length')
+          echo "tempo traces=$count"
+          test "$count" -ge 1
+
+      - name: Assert Loki
+        run: |
+          set -euo pipefail
+          count=$(curl -sfG 'http://localhost:3100/loki/api/v1/query_range' \
+            --data-urlencode 'query={service_name="legacybridge"}' \
+            --data-urlencode 'limit=5' | jq '.data.result | length')
+          echo "loki streams=$count"
+          test "$count" -ge 1
+
+      - name: Stop stack
+        if: always()
+        run: docker compose -f observability/docker-compose.yml down -v

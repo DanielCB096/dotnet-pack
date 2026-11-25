@@ -1,0 +1,24 @@
+# PipelineKit documentation
+
+Reusable .NET building blocks for incremental, observable and testable data
+pipelines.
+
+![PipelineKit dashboard](capturas/pipelinekit-dashboard.png)
+
+## Start here
+
+- [How it works](como-funciona.md)
+- [Architecture](architecture.md)
+- [Code guide](code-guide.md)
+- [IncrementalRunner deep dive](incremental-runner.md)
+- [Publishing](PUBLISHING.md)
+- [Mutation testing](mutation-testing.md)
+- [ADRs](adr/README.md)
+
+## Repository
+
+- [README](https://github.com/DanielCB096/dotnet-pack/blob/main/README.md)
+- [LegacyBridge sample](https://github.com/DanielCB096/dotnet-pack/blob/main/samples/LegacyBridge/README.md)
+- [Observability stack](https://github.com/DanielCB096/dotnet-pack/blob/main/observability/README.md)
+- [Benchmarks](https://github.com/DanielCB096/dotnet-pack/blob/main/benchmarks/RESULTS.md)
+- [Job template](https://github.com/DanielCB096/dotnet-pack/blob/main/templates/pipelinekit-job/README.md)

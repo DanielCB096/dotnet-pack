@@ -3,6 +3,8 @@ obj/
 artifacts/
 artifacts-test/
 coverage/
+StrykerOutput/
+docs/_site/
 publish-x86/
 publish-x86-sc/
 ci-data/

@@ -180,6 +180,14 @@ See [observability/README.md](observability/README.md).
 
 ![PipelineKit dashboard](docs/capturas/pipelinekit-dashboard.png)
 
+### Demo walkthrough
+
+![PipelineKit demo storyboard: dashboard, metrics and logs](docs/capturas/pipelinekit-storyboard.png)
+
+A 60-second walkthrough: open the dashboard, read the batch and row metrics,
+then follow a batch through the logs. Every panel comes from a real run of the
+LegacyBridge sample.
+
 ## Benchmarks
 
 ```bash
@@ -193,9 +201,11 @@ Results: [benchmarks/RESULTS.md](benchmarks/RESULTS.md).
 | Document | Content |
 |---|---|
 | [docs/README.md](docs/README.md) | Documentation index |
+| [docs/index.md](docs/index.md) | Documentation site home (DocFX) |
 | [docs/como-funciona.md](docs/como-funciona.md) | ExplicaciÃ³n completa del funcionamiento, con analogÃ­as y flujo |
 | [docs/incremental-runner.md](docs/incremental-runner.md) | Deep dive del runner: checkpoint, ventana y commit |
 | [docs/architecture.md](docs/architecture.md) | Package map, runtime flow, checkpoint semantics, outbox, agent isolation |
+| [docs/mutation-testing.md](docs/mutation-testing.md) | Stryker.NET baseline and how to run it |
 | [docs/code-guide.md](docs/code-guide.md) | Reading order, contracts, how to add a source, sink, rule or adapter |
 | [docs/PUBLISHING.md](docs/PUBLISHING.md) | Release process, GitHub Packages, template installation |
 | [docs/adr](docs/adr/README.md) | Architecture decision records |

@@ -1,0 +1,18 @@
+{
+  "stryker-config": {
+    "solution": "PipelineKit.slnx",
+    "project": "src/PipelineKit.Quality/PipelineKit.Quality.csproj",
+    "mutate": [
+      "Rules.cs",
+      "SchemaDriftDetector.cs",
+      "Reconciliation.cs"
+    ],
+    "reporters": ["html", "json", "progress"],
+    "thresholds": {
+      "high": 80,
+      "low": 60,
+      "break": 0
+    },
+    "concurrency": 2
+  }
+}

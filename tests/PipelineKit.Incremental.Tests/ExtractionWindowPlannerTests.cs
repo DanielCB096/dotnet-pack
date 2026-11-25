@@ -73,6 +73,26 @@ public sealed class ExtractionWindowPlannerTests
         Assert.Equal(10, window.AfterKey);
     }
 
+    [Fact]
+    public void Plan_rejects_a_null_request()
+    {
+        var exception = Assert.Throws<ArgumentNullException>(
+            () => ExtractionWindowPlanner.Plan(null!, null, Now));
+
+        Assert.Equal("request", exception.ParamName);
+    }
+
+    [Fact]
+    public void Unknown_strategy_throws_with_a_message()
+    {
+        var request = Request((IncrementalStrategy)99);
+
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(
+            () => ExtractionWindowPlanner.Plan(request, null, Now));
+
+        Assert.Contains("Unknown incremental strategy.", exception.Message);
+    }
+
     private static IncrementalRequest Request(IncrementalStrategy strategy) => new()
     {
         Pipeline = "sales",

@@ -37,9 +37,27 @@ jobs:
         with:
           user: ${{ vars.NUGET_USER || 'Daniel_CB' }}
 
-      - name: Publish to NuGet.org
-        run: >
-          dotnet nuget push "artifacts/*.nupkg"
-          --api-key "${{ steps.login.outputs.NUGET_API_KEY }}"
-          --source "https://api.nuget.org/v3/index.json"
-          --skip-duplicate
+      - name: Publish packages to NuGet.org
+        run: |
+          for pkg in artifacts/*.nupkg; do
+            case "$pkg" in
+              *.snupkg) continue ;;
+            esac
+            dotnet nuget push "$pkg" \
+              --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+              --source "https://api.nuget.org/v3/index.json" \
+              --skip-duplicate
+          done
+
+      - name: Publish symbols to NuGet.org
+        run: |
+          for pkg in artifacts/*.snupkg; do
+            [ -e "$pkg" ] || continue
+            case "$pkg" in
+              *PipelineKit.Templates*) continue ;;
+            esac
+            dotnet nuget push "$pkg" \
+              --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+              --source "https://api.nuget.org/v3/index.json" \
+              --skip-duplicate
+          done

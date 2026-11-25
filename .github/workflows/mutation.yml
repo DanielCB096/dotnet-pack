@@ -12,14 +12,14 @@ jobs:
   incremental:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: "10.0.x"
       - run: dotnet tool restore
       - run: dotnet restore PipelineKit.slnx --configfile NuGet.Config
       - run: dotnet stryker --config-file stryker-config.incremental.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: stryker-incremental
           path: StrykerOutput/**
@@ -27,14 +27,14 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: "10.0.x"
       - run: dotnet tool restore
       - run: dotnet restore PipelineKit.slnx --configfile NuGet.Config
       - run: dotnet stryker --config-file stryker-config.quality.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: stryker-quality
           path: StrykerOutput/**

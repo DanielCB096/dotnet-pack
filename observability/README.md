@@ -18,6 +18,12 @@ docker compose -f observability/docker-compose.yml ps
 | Loki | http://localhost:3100 |
 | Collector health | http://localhost:13133 |
 
+![PipelineKit dashboard](../docs/capturas/pipelinekit-dashboard.png)
+
+The dashboard shows batches, extracted and rejected rows, failures, duration
+p95, rows by pipeline and logs. The collector keeps metric series for one hour
+(`metric_expiration: 1h`).
+
 ## Send telemetry from the sample
 
 Set `OTEL_EXPORTER_OTLP_ENDPOINT`; without it the sample uses the console exporter.

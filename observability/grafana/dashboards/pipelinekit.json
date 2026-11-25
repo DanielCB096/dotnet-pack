@@ -17,7 +17,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(increase(pipeline_batches_total[$__range]))",
+          "expr": "sum(pipeline_batches_total)",
           "legendFormat": "batches"
         }
       ],
@@ -49,7 +49,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(increase(pipeline_rows_extracted_total[$__range]))",
+          "expr": "sum(pipeline_rows_extracted_total)",
           "legendFormat": "rows"
         }
       ],
@@ -81,7 +81,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(increase(pipeline_rows_rejected_total[$__range]))",
+          "expr": "sum(pipeline_rows_rejected_total)",
           "legendFormat": "rejected"
         }
       ],
@@ -116,7 +116,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(increase(pipeline_failures_total[$__range]))",
+          "expr": "sum(pipeline_failures_total) or vector(0)",
           "legendFormat": "failures"
         }
       ],
@@ -145,14 +145,14 @@
     {
       "id": 5,
       "type": "timeseries",
-      "title": "Batches per minute",
+      "title": "Batches (cumulative)",
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(rate(pipeline_batches_total[$__rate_interval])) * 60",
-          "legendFormat": "batches/min"
+          "expr": "sum(pipeline_batches_total)",
+          "legendFormat": "batches"
         }
       ],
       "fieldConfig": {
@@ -167,13 +167,13 @@
     {
       "id": 6,
       "type": "timeseries",
-      "title": "Duration p95 (ms)",
+      "title": "Duration p95 (ms, latest)",
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "refId": "A",
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(pipeline_duration_milliseconds_bucket[$__rate_interval])))",
+          "expr": "histogram_quantile(0.95, sum by (le) (pipeline_duration_milliseconds_bucket))",
           "legendFormat": "p95"
         }
       ],
@@ -195,7 +195,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (pipeline_name, pipeline_source, pipeline_table) (increase(pipeline_rows_extracted_total[$__range]))",
+          "expr": "sum by (pipeline_name, pipeline_source, pipeline_table) (pipeline_rows_extracted_total)",
           "format": "table",
           "instant": true
         }

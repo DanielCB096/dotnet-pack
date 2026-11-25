@@ -146,6 +146,8 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 \
 
 See [observability/README.md](observability/README.md).
 
+![PipelineKit dashboard](docs/capturas/pipelinekit-dashboard.png)
+
 ## Benchmarks
 
 ```bash

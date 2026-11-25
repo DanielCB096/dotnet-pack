@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Dashboard screenshot in the README and observability guide.
+- Manual `nuget-publish` workflow and NuGet.org instructions.
+
 ## [0.5.0] - 2026-11-25
 
 ### Added

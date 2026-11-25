@@ -89,3 +89,29 @@ O desde el paquete local:
 ```powershell
 dotnet new install artifacts/PipelineKit.Templates.0.5.0.nupkg
 ```
+
+## 7. Publicar en NuGet.org
+
+La publicación en NuGet.org es **manual** para no publicar por accidente cada
+etiqueta.
+
+1. Crea una API key en https://www.nuget.org/account/apikeys con permiso de push
+   para el prefijo `PipelineKit`.
+2. En GitHub, ve a **Settings → Secrets and variables → Actions** y crea el
+   secreto `NUGET_API_KEY`.
+3. Ejecuta el workflow **nuget-publish** desde **Actions → nuget-publish → Run
+   workflow**.
+4. Verifica los paquetes en https://www.nuget.org/packages/PipelineKit.Incremental
+
+También puedes publicar a mano:
+
+```powershell
+dotnet pack PipelineKit.slnx -c Release -o artifacts
+
+dotnet nuget push "artifacts/*.nupkg" `
+  --api-key "TU_API_KEY" `
+  --source "https://api.nuget.org/v3/index.json" `
+  --skip-duplicate
+```
+
+Los IDs `PipelineKit.*` están libres en NuGet.org a la fecha de esta guía.

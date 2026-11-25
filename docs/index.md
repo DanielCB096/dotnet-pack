@@ -7,6 +7,8 @@ pipelines.
 
 ## Start here
 
+- [Handover](handover.md)
+- [Roadmap to 1.0](roadmap-1.0.md)
 - [How it works](como-funciona.md)
 - [Architecture](architecture.md)
 - [Code guide](code-guide.md)

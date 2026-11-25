@@ -204,6 +204,8 @@ Online: https://danielcb096.github.io/dotnet-pack/
 |---|---|
 | [docs/README.md](docs/README.md) | Documentation index |
 | [docs/index.md](docs/index.md) | Documentation site home (DocFX) |
+| [docs/handover.md](docs/handover.md) | Estado, infraestructura y runbooks para el traspaso |
+| [docs/roadmap-1.0.md](docs/roadmap-1.0.md) | Plan, decisiones y checklist para 1.0 |
 | [docs/como-funciona.md](docs/como-funciona.md) | ExplicaciÃ³n completa del funcionamiento, con analogÃ­as y flujo |
 | [docs/incremental-runner.md](docs/incremental-runner.md) | Deep dive del runner: checkpoint, ventana y commit |
 | [docs/architecture.md](docs/architecture.md) | Package map, runtime flow, checkpoint semantics, outbox, agent isolation |

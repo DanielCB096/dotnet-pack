@@ -4,6 +4,8 @@ Online: https://danielcb096.github.io/dotnet-pack/
 
 | Document | Content |
 |---|---|
+| [handover.md](handover.md) | Estado, infraestructura, runbooks y checklist de traspaso |
+| [roadmap-1.0.md](roadmap-1.0.md) | Plan, decisiones y checklist para 1.0 |
 | [architecture.md](architecture.md) | Package map, runtime flow, checkpoint semantics, outbox, agent isolation |
 | [code-guide.md](code-guide.md) | Reading order, contracts and extension points |
 | [como-funciona.md](como-funciona.md) | Explicación completa en español, con analogías |

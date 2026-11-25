@@ -185,6 +185,8 @@ Results: [benchmarks/RESULTS.md](benchmarks/RESULTS.md).
 | Document | Content |
 |---|---|
 | [docs/README.md](docs/README.md) | Documentation index |
+| [docs/como-funciona.md](docs/como-funciona.md) | Explicación completa del funcionamiento, con analogías y flujo |
+| [docs/incremental-runner.md](docs/incremental-runner.md) | Deep dive del runner: checkpoint, ventana y commit |
 | [docs/architecture.md](docs/architecture.md) | Package map, runtime flow, checkpoint semantics, outbox, agent isolation |
 | [docs/code-guide.md](docs/code-guide.md) | Reading order, contracts, how to add a source, sink, rule or adapter |
 | [docs/PUBLISHING.md](docs/PUBLISHING.md) | Release process, GitHub Packages, template installation |

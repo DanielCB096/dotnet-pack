@@ -31,7 +31,7 @@ if (args.Contains("--agent"))
 var options = ControlOptions.Parse(args);
 var otlpEndpoint = Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT");
 var useOtlp = !string.IsNullOrWhiteSpace(otlpEndpoint);
-var resource = PipelineTelemetryResource.Create("legacybridge", "0.6.0");
+var resource = PipelineTelemetryResource.Create("legacybridge", "0.7.0");
 
 using var loggerFactory = LoggerFactory.Create(builder =>
 {

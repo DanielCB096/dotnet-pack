@@ -5,7 +5,7 @@ Versioned JSON contract and process host for isolated extraction agents.
 ## Install
 
 ```bash
-dotnet add package PipelineKit.AgentProtocol --version 0.6.0
+dotnet add package PipelineKit.AgentProtocol --version 0.7.0
 ```
 
 ## Why

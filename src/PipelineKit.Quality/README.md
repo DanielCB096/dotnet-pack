@@ -5,7 +5,7 @@ Data quality rules, quarantine, schema drift detection and reconciliation.
 ## Install
 
 ```bash
-dotnet add package PipelineKit.Quality --version 0.6.0
+dotnet add package PipelineKit.Quality --version 0.7.0
 ```
 
 ## Usage

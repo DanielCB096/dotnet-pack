@@ -5,7 +5,7 @@ SQLite checkpoint store for PipelineKit.
 ## Install
 
 ```bash
-dotnet add package PipelineKit.Incremental.Sqlite --version 0.6.0
+dotnet add package PipelineKit.Incremental.Sqlite --version 0.7.0
 ```
 
 ## Usage

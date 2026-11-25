@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.7.0] - 2026-11-25
 
 ### Added
 
@@ -13,6 +13,12 @@
   the `mutation` workflow fails on a regression.
 - Simplified `MaxLengthRule` and `RangeRule` to avoid redundant missing/null
   branches, with contract tests for rule names, messages and boundaries.
+
+### Changed
+
+- GitHub Actions updated: `checkout` v7, `setup-dotnet` v6, `upload-artifact` v7
+  and `gh-release` v3.
+- `xunit.runner.visualstudio` updated to 4.0.1.
 
 ## [0.6.0] - 2026-11-25
 

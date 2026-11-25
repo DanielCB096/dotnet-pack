@@ -5,13 +5,13 @@ OpenTelemetry registration and exporters for PipelineKit.
 ## Install
 
 ```bash
-dotnet add package PipelineKit.Telemetry.OpenTelemetry --version 0.6.0
+dotnet add package PipelineKit.Telemetry.OpenTelemetry --version 0.7.0
 ```
 
 ## Usage
 
 ```csharp
-var resource = PipelineTelemetryResource.Create("legacybridge", "0.6.0");
+var resource = PipelineTelemetryResource.Create("legacybridge", "0.7.0");
 
 using var tracerProvider = Sdk.CreateTracerProviderBuilder()
     .SetResourceBuilder(resource)

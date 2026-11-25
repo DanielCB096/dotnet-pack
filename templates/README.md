@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-dotnet new install PipelineKit.Templates::0.6.0
+dotnet new install PipelineKit.Templates::0.7.0
 dotnet new pipelinekit-job -n MyPipeline
 ```
 

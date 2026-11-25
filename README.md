@@ -99,31 +99,31 @@ docker-compose.yml    RabbitMQ for local end-to-end
 ## Template
 
 ```bash
-dotnet new install PipelineKit.Templates::0.6.0
+dotnet new install PipelineKit.Templates::0.7.0
 dotnet new pipelinekit-job -n MyPipeline
 ```
 
 Desde el paquete local, si estÃ¡s desarrollando el repo:
 
 ```bash
-dotnet new install artifacts/PipelineKit.Templates.0.6.0.nupkg
+dotnet new install artifacts/PipelineKit.Templates.0.7.0.nupkg
 ```
 
 See [templates/pipelinekit-job/README.md](templates/pipelinekit-job/README.md).
 
 ## Install from NuGet.org
 
-All packages are published as `0.6.0`:
+All packages are published as `0.7.0`:
 
 ```bash
-dotnet add package PipelineKit.Incremental --version 0.6.0
-dotnet add package PipelineKit.Incremental.Sqlite --version 0.6.0
-dotnet add package PipelineKit.Incremental.EntityFrameworkCore --version 0.6.0
-dotnet add package PipelineKit.Quality --version 0.6.0
-dotnet add package PipelineKit.Telemetry --version 0.6.0
-dotnet add package PipelineKit.Telemetry.OpenTelemetry --version 0.6.0
-dotnet add package PipelineKit.AgentProtocol --version 0.6.0
-dotnet add package PipelineKit.Testing --version 0.6.0
+dotnet add package PipelineKit.Incremental --version 0.7.0
+dotnet add package PipelineKit.Incremental.Sqlite --version 0.7.0
+dotnet add package PipelineKit.Incremental.EntityFrameworkCore --version 0.7.0
+dotnet add package PipelineKit.Quality --version 0.7.0
+dotnet add package PipelineKit.Telemetry --version 0.7.0
+dotnet add package PipelineKit.Telemetry.OpenTelemetry --version 0.7.0
+dotnet add package PipelineKit.AgentProtocol --version 0.7.0
+dotnet add package PipelineKit.Testing --version 0.7.0
 ```
 
 - https://www.nuget.org/packages/PipelineKit.Incremental
@@ -217,7 +217,7 @@ Online: https://danielcb096.github.io/dotnet-pack/
 
 ## Status
 
-Version `0.6.0`. The API may change before `1.0.0`.
+Version `0.7.0`. The API may change before `1.0.0`.
 
 Verified locally:
 
@@ -232,7 +232,7 @@ Verified locally:
 - Grafana dashboard `PipelineKit pipelines` has 9 panels.
 - `LegacyBridge` is published and executed as `win-x86` in CI.
 - `dotnet new pipelinekit-job` generates a runnable project.
-- The 9 packages are published on NuGet.org as `0.6.0` via Trusted Publishing.
+- The 9 packages are published on NuGet.org as `0.7.0` via Trusted Publishing.
 
 Before publishing, update `PackageProjectUrl` and `RepositoryUrl` in
 `Directory.Build.props` with your GitHub repository.

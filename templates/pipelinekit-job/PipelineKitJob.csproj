@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PipelineKit.Incremental" Version="0.6.0" />
-    <PackageReference Include="PipelineKit.Incremental.Sqlite" Version="0.6.0" />
-    <PackageReference Include="PipelineKit.Quality" Version="0.6.0" />
-    <PackageReference Include="PipelineKit.Telemetry" Version="0.6.0" />
+    <PackageReference Include="PipelineKit.Incremental" Version="0.7.0" />
+    <PackageReference Include="PipelineKit.Incremental.Sqlite" Version="0.7.0" />
+    <PackageReference Include="PipelineKit.Quality" Version="0.7.0" />
+    <PackageReference Include="PipelineKit.Telemetry" Version="0.7.0" />
   </ItemGroup>
 
 </Project>

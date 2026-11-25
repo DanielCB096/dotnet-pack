@@ -6,8 +6,8 @@ los paquetes desde GitHub Packages.
 ## 1. Publicar una versión
 
 ```powershell
-git tag v0.6.0
-git push origin v0.6.0
+git tag v0.7.0
+git push origin v0.7.0
 ```
 
 Eso lanza el workflow `publish`, que:
@@ -48,7 +48,7 @@ El token debe tener permiso `read:packages`.
 Luego:
 
 ```bash
-dotnet add package PipelineKit.Incremental --version 0.6.0
+dotnet add package PipelineKit.Incremental --version 0.7.0
 ```
 
 ## 4. Publicar a mano (opcional)
@@ -66,7 +66,7 @@ dotnet nuget push "artifacts/*.nupkg" `
 La versión está en `Directory.Build.props`:
 
 ```xml
-<Version>0.6.0</Version>
+<Version>0.7.0</Version>
 ```
 
 Para una nueva entrega, cámbiala, actualiza `CHANGELOG.md`, haz commit y sube
@@ -80,14 +80,14 @@ git push origin v0.7.0
 ## 6. Instalar la plantilla
 
 ```powershell
-dotnet new install PipelineKit.Templates::0.6.0 `
+dotnet new install PipelineKit.Templates::0.7.0 `
   --add-source "https://nuget.pkg.github.com/DanielCB096/index.json"
 ```
 
 O desde el paquete local:
 
 ```powershell
-dotnet new install artifacts/PipelineKit.Templates.0.6.0.nupkg
+dotnet new install artifacts/PipelineKit.Templates.0.7.0.nupkg
 ```
 
 ## 7. Publicar en NuGet.org con Trusted Publishing
@@ -134,7 +134,7 @@ Los IDs `PipelineKit.*` están libres en NuGet.org a la fecha de esta guía.
 ### Consumir desde NuGet.org
 
 ```bash
-dotnet add package PipelineKit.Incremental --version 0.6.0
-dotnet add package PipelineKit.Telemetry.OpenTelemetry --version 0.6.0
-dotnet new install PipelineKit.Templates::0.6.0
+dotnet add package PipelineKit.Incremental --version 0.7.0
+dotnet add package PipelineKit.Telemetry.OpenTelemetry --version 0.7.0
+dotnet new install PipelineKit.Templates::0.7.0
 ```

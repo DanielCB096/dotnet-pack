@@ -114,4 +114,11 @@ dotnet nuget push "artifacts/*.nupkg" `
   --skip-duplicate
 ```
 
+O con el script del repositorio, sin pegar la clave en el chat:
+
+```powershell
+$env:NUGET_API_KEY = "TU_API_KEY"
+.\scripts\publish-nuget.ps1
+```
+
 Los IDs `PipelineKit.*` están libres en NuGet.org a la fecha de esta guía.

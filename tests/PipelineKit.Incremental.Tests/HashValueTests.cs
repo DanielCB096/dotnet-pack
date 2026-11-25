@@ -26,4 +26,20 @@ public sealed class HashValueTests
 
         Assert.NotEqual(first, second);
     }
+
+    [Fact]
+    public void Hash_encodes_null_as_a_marker()
+    {
+        var hash = RowHasher.Compute(new Dictionary<string, object?> { ["a"] = null });
+
+        Assert.Equal("c63cfb5f52e0909bffa51511af93cf3c5772ff8610dc7307dd8e6da733c8cdd3", hash);
+    }
+
+    [Fact]
+    public void Hash_rejects_null_values()
+    {
+        var exception = Assert.Throws<ArgumentNullException>(() => RowHasher.Compute(null!));
+
+        Assert.Equal("values", exception.ParamName);
+    }
 }

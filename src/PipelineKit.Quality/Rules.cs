@@ -31,12 +31,7 @@ public sealed class MaxLengthRule(string column, int maxLength) : IQualityRule
         IReadOnlyDictionary<string, object?> row,
         CancellationToken ct = default)
     {
-        if (!row.TryGetValue(column, out var value) || value is null)
-        {
-            return ValueTask.FromResult(QualityResult.Ok);
-        }
-
-        var text = Convert.ToString(value, CultureInfo.InvariantCulture) ?? string.Empty;
+        var text = Convert.ToString(row.GetValueOrDefault(column), CultureInfo.InvariantCulture)!;
         if (text.Length > maxLength)
         {
             return ValueTask.FromResult(QualityResult.Fail(
@@ -60,7 +55,8 @@ public sealed class RangeRule(string column, decimal min, decimal max) : IQualit
         IReadOnlyDictionary<string, object?> row,
         CancellationToken ct = default)
     {
-        if (!row.TryGetValue(column, out var value) || value is null)
+        var value = row.GetValueOrDefault(column);
+        if (value is null)
         {
             return ValueTask.FromResult(QualityResult.Ok);
         }
@@ -100,12 +96,13 @@ public sealed class RegexRule(string column, string pattern) : IQualityRule
         IReadOnlyDictionary<string, object?> row,
         CancellationToken ct = default)
     {
-        if (!row.TryGetValue(column, out var value) || value is null)
+        var value = row.GetValueOrDefault(column);
+        if (value is null)
         {
             return ValueTask.FromResult(QualityResult.Ok);
         }
 
-        var text = Convert.ToString(value, CultureInfo.InvariantCulture) ?? string.Empty;
+        var text = Convert.ToString(value, CultureInfo.InvariantCulture)!;
         if (!_regex.IsMatch(text))
         {
             return ValueTask.FromResult(QualityResult.Fail(

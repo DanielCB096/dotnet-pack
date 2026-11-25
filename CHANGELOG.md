@@ -9,6 +9,10 @@
 - End-to-end observability CI (`observability` workflow) that runs the stack,
   the sample and asserts Prometheus, Tempo and Loki data.
 - Demo storyboard and extra tests for hashing and extraction windows.
+- Mutation score raised to 100% in both configurations; `break` is now 80, so
+  the `mutation` workflow fails on a regression.
+- Simplified `MaxLengthRule` and `RangeRule` to avoid redundant missing/null
+  branches, with contract tests for rule names, messages and boundaries.
 
 ## [0.6.0] - 2026-11-25
 

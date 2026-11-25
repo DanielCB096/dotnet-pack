@@ -20,8 +20,8 @@ Two configurations are included:
 Results are written to `StrykerOutput/` (HTML and JSON). The GitHub workflow
 `mutation` runs both weekly and on demand.
 
-The `break` threshold is `0` so the workflow reports the score without failing.
-Raise it once the suite reaches the desired mutation score.
+The workflow is a gate: `break` is `80`, so a score below 80 fails the run.
+`low` and `high` (85 and 95) only control the report colors.
 
 ## Baseline results
 
@@ -29,8 +29,8 @@ Local run on 2026-11-25:
 
 | Config | Score | Killed | Survived |
 |---|---:|---:|---:|
-| Incremental | **66.67%** | 10 | 3 |
-| Quality | **49.30%** | 35 | 12 |
+| Incremental | **100.00%** | 15 | 0 |
+| Quality | **100.00%** | 56 | 0 |
 
-These are baselines, not targets. Add tests for the surviving mutants before
-raising the `break` threshold.
+Both configurations kill every executable mutant. Coverage is limited to the
+files listed above; these scores are not a whole-project metric.

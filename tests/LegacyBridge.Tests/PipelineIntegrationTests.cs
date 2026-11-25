@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using LegacyBridge.Consumer;
 using LegacyBridge.Control;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
@@ -100,10 +101,12 @@ public sealed class PipelineIntegrationTests : IDisposable
         await host.RunAsync(new FakeIncrementalSource(ToSourceRows(await legacy.ReadAllAsync())));
 
         var messagesPath = Path.Combine(_dataDirectory, "messages.ndjson");
-        var relay = new OutboxRelay(options.WarehouseDbPath, messagesPath, TimeProvider.System);
+        var store = new SqliteOutboxStore(options.WarehouseDbPath);
+        var publisher = new NdjsonOutboxPublisher(messagesPath);
+        var relay = new OutboxRelay(store, publisher, TimeProvider.System);
 
-        var first = await relay.PublishPendingAsync();
-        var second = await relay.PublishPendingAsync();
+        var first = await relay.RunOnceAsync();
+        var second = await relay.RunOnceAsync();
 
         Assert.Equal(1, first);
         Assert.Equal(0, second);
@@ -112,6 +115,41 @@ public sealed class PipelineIntegrationTests : IDisposable
         var line = Assert.Single(lines);
         using var document = JsonDocument.Parse(line);
         Assert.Equal("orders.batch.loaded", document.RootElement.GetProperty("type").GetString());
+    }
+
+    [Fact]
+    public async Task Outbox_is_not_marked_when_publish_fails()
+    {
+        using var loggerFactory = LoggerFactory.Create(_ => { });
+        var options = new ControlOptions(_dataDirectory, Reset: true);
+        var host = new PipelineHost(options, TimeProvider.System, loggerFactory);
+        await host.InitializeAsync();
+
+        var legacy = new LegacyDatabase(options.LegacyDbPath);
+        await host.RunAsync(new FakeIncrementalSource(ToSourceRows(await legacy.ReadAllAsync())));
+
+        var store = new SqliteOutboxStore(options.WarehouseDbPath);
+        var relay = new OutboxRelay(store, new ThrowingPublisher(), TimeProvider.System);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => relay.RunOnceAsync());
+
+        var report = await host.GetReportAsync();
+        Assert.Equal(1, report.OutboxPending);
+    }
+
+    [Fact]
+    public async Task Consumer_processed_store_is_idempotent()
+    {
+        var path = Path.Combine(_dataDirectory, "consumer.db");
+        var store = new ProcessedMessageStore(path);
+        await store.EnsureSchemaAsync();
+
+        Assert.False(await store.IsProcessedAsync("message-1"));
+
+        await store.MarkProcessedAsync("message-1", DateTimeOffset.UtcNow);
+        await store.MarkProcessedAsync("message-1", DateTimeOffset.UtcNow);
+
+        Assert.True(await store.IsProcessedAsync("message-1"));
     }
 
     public void Dispose()
@@ -157,4 +195,10 @@ public sealed class PipelineIntegrationTests : IDisposable
                 modified,
                 modified.ToString("yyyyMM", CultureInfo.InvariantCulture));
         }).ToArray();
+
+    private sealed class ThrowingPublisher : IOutboxPublisher
+    {
+        public Task PublishAsync(OutboxMessage message, CancellationToken ct = default) =>
+            throw new InvalidOperationException("Simulated publish failure.");
+    }
 }

@@ -67,13 +67,46 @@ NDJSON  ──►  PipelineKit.Incremental  ──►  quality rules
                                                               ▼
                                                           outbox
                                                               │
-                                                              ▼
-                                                   messages.ndjson
+                                        ┌─────────────────────┴─────────────────────┐
+                                        ▼                                           ▼
+                                  messages.ndjson                        RabbitMQ topic exchange
+                                  (default, no broker)                   pipeline.events
+                                                                                 │
+                                                                                 ▼
+                                                                    LegacyBridge.Consumer
+                                                                    processed_messages (SQLite)
 ```
 
 Each batch writes an `orders.batch.loaded` event in the same SQLite
-transaction. `OutboxRelay` publishes pending events to `messages.ndjson` and
-marks them as processed, so a second pass publishes zero.
+transaction. `OutboxRelay` publishes pending events and marks them processed,
+so a second pass publishes zero. The consumer stores processed message ids and
+acks duplicates without reprocessing.
+
+## RabbitMQ
+
+```bash
+docker compose up -d rabbitmq
+
+RABBITMQ_HOST=localhost RABBITMQ_USER=pipeline RABBITMQ_PASSWORD=pipeline \
+  dotnet run --project samples/LegacyBridge/LegacyBridge.Control -c Release -- --reset
+
+RABBITMQ_HOST=localhost RABBITMQ_USER=pipeline RABBITMQ_PASSWORD=pipeline \
+  dotnet run --project samples/LegacyBridge.Consumer -c Release -- --once
+```
+
+Without `RABBITMQ_HOST`, the sample keeps working with `messages.ndjson`.
+
+Configuration:
+
+| Variable | Default |
+|---|---|
+| `RABBITMQ_HOST` | unset (NDJSON mode) |
+| `RABBITMQ_PORT` | `5672` |
+| `RABBITMQ_USER` | `pipeline` |
+| `RABBITMQ_PASSWORD` | `pipeline` |
+| `RABBITMQ_EXCHANGE` | `pipeline.events` |
+| `RABBITMQ_QUEUE` | `legacybridge.orders` |
+| `RABBITMQ_ROUTING_KEY` | `orders.batch.loaded` |
 
 ## Agent mode
 
@@ -99,7 +132,9 @@ dotnet publish samples/LegacyBridge/LegacyBridge.Control -c Release -r win-x86 -
 | `AgentProgram.cs` | Agent mode: SQLite → NDJSON |
 | `AgentIncrementalSource.cs` | PipelineKit source backed by the agent process |
 | `SqliteBatchSink.cs` | Quality, staging, dimensional upsert, quarantine and outbox |
-| `OutboxRelay.cs` | Publishes pending outbox events to NDJSON |
+| `OutboxRelay.cs` | Outbox store, NDJSON publisher and relay |
+| `RabbitMqOptions.cs` | RabbitMQ environment settings |
+| `RabbitMqOutboxPublisher.cs` | Durable topic exchange publisher |
 | `PipelineHost.cs` | Orchestration, reconciliation and report |
 | `Program.cs` | CLI and OpenTelemetry console exporter |
 

@@ -17,6 +17,10 @@
 - Integration tests for the LegacyBridge pipeline: initial load, overlap
   idempotency, mutation and hard-delete reconciliation.
 - Windows CI job that publishes and runs the sample as `win-x86`.
+- RabbitMQ outbox publisher and idempotent `LegacyBridge.Consumer`.
+- `docker-compose.yml` with a durable RabbitMQ broker.
+- RabbitMQ end-to-end CI job.
+- Tests for publish failure and consumer inbox idempotency.
 
 ## [0.3.0] - 2026-11-24
 

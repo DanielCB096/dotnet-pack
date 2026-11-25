@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\samples\LegacyBridge\LegacyBridge.Control\LegacyBridge.Control.csproj" />
+    <ProjectReference Include="..\..\samples\LegacyBridge.Consumer\LegacyBridge.Consumer.csproj" />
     <ProjectReference Include="..\..\src\PipelineKit.Testing\PipelineKit.Testing.csproj" />
   </ItemGroup>
 

@@ -75,3 +75,53 @@ jobs:
         run: |
           .\publish-x86\LegacyBridge.Control.exe --reset --data "${{ github.workspace }}\ci-data"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+  rabbitmq-e2e:
+    runs-on: ubuntu-latest
+    services:
+      rabbitmq:
+        image: rabbitmq:4.4.1-management
+        ports:
+          - 5672:5672
+        env:
+          RABBITMQ_DEFAULT_USER: pipeline
+          RABBITMQ_DEFAULT_PASS: pipeline
+        options: >-
+          --health-cmd "rabbitmq-diagnostics -q ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore PipelineKit.slnx --configfile NuGet.Config
+
+      - name: Build samples
+        run: |
+          dotnet build samples/LegacyBridge/LegacyBridge.Control -c Release --no-restore
+          dotnet build samples/LegacyBridge.Consumer -c Release --no-restore
+
+      - name: Publish three events
+        env:
+          RABBITMQ_HOST: localhost
+          RABBITMQ_USER: pipeline
+          RABBITMQ_PASSWORD: pipeline
+        run: dotnet run --project samples/LegacyBridge/LegacyBridge.Control -c Release --no-build -- --reset
+
+      - name: Consume three events idempotently
+        env:
+          RABBITMQ_HOST: localhost
+          RABBITMQ_USER: pipeline
+          RABBITMQ_PASSWORD: pipeline
+          LEGACYBRIDGE_DATA: /tmp/legacybridge-consumer
+        run: |
+          for i in 1 2 3; do
+            dotnet run --project samples/LegacyBridge.Consumer -c Release --no-build -- --once
+          done

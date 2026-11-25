@@ -78,11 +78,12 @@ the next run re-reads the same window and the sink must be idempotent.
 ## Repository layout
 
 ```
-src/        packages
-tests/      unit tests
-samples/    runnable end-to-end sample
-templates/  dotnet new template
-docs/adr/   architecture decisions
+src/                  packages
+tests/                unit and integration tests
+samples/              LegacyBridge control and RabbitMQ consumer
+templates/            dotnet new template
+docs/                 architecture, code guide and ADRs
+docker-compose.yml    RabbitMQ for local end-to-end
 ```
 
 ## Template
@@ -99,6 +100,27 @@ See [templates/pipelinekit-job/README.md](templates/pipelinekit-job/README.md).
 
 The `publish` workflow publishes the packages when a `v*` tag is pushed.
 See [docs/PUBLISHING.md](docs/PUBLISHING.md) for the feed URL and credentials.
+
+## Messaging and outbox
+
+The LegacyBridge sample writes an outbox event per batch. By default it publishes
+to `messages.ndjson`. With RabbitMQ configured, it publishes to a durable topic
+exchange and a consumer processes each event exactly once.
+
+```bash
+docker compose up -d rabbitmq
+
+RABBITMQ_HOST=localhost RABBITMQ_USER=pipeline RABBITMQ_PASSWORD=pipeline \
+  dotnet run --project samples/LegacyBridge/LegacyBridge.Control -c Release -- --reset
+
+RABBITMQ_HOST=localhost RABBITMQ_USER=pipeline RABBITMQ_PASSWORD=pipeline \
+  dotnet run --project samples/LegacyBridge.Consumer -c Release -- --once
+```
+
+Management UI: http://localhost:15672 (`pipeline` / `pipeline`).
+
+The consumer stores processed message ids in SQLite, so duplicates are acked
+without being processed again.
 
 ## Documentation
 
@@ -119,11 +141,12 @@ Version `0.4.0`. The API may change before `1.0.0`.
 Verified locally:
 
 - `dotnet build`: 0 warnings, 0 errors.
-- `dotnet test`: **29/29 tests** across 8 test projects.
+- `dotnet test`: **31/31 tests** across 8 test projects.
 - `dotnet pack`: 9 packages, including `netstandard2.0` and `net10.0` assets
   for `PipelineKit.AgentProtocol`.
 - `LegacyBridge` end-to-end sample runs against a simulated legacy database.
 - `LegacyBridge` publishes an outbox event per batch and relays it exactly once.
+- RabbitMQ end-to-end job publishes three events and consumes them idempotently.
 - `LegacyBridge` is published and executed as `win-x86` in CI.
 - `dotnet new pipelinekit-job` generates a runnable project.
 

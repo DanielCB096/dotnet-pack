@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/samples/">
+    <Project Path="samples/LegacyBridge.Consumer/LegacyBridge.Consumer.csproj" />
     <Project Path="samples/PipelineKit.Sample.LegacyBridge/PipelineKit.Sample.LegacyBridge.csproj" />
   </Folder>
   <Folder Name="/samples/LegacyBridge/">

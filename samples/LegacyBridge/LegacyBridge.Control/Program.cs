@@ -71,16 +71,32 @@ Print("Run 3 (incremental)", await host.RunAsync());
 var reconciled = await host.ReconcileDeletesAsync();
 Console.WriteLine($"Reconciliación de borrados: {reconciled} fila(s) marcadas como eliminadas.");
 
-var relay = new OutboxRelay(
-    options.WarehouseDbPath,
-    Path.Combine(options.DataDirectory, "messages.ndjson"),
-    TimeProvider.System);
+var rabbit = RabbitMqOptions.FromEnvironment();
+IOutboxPublisher publisher = rabbit is null
+    ? new NdjsonOutboxPublisher(Path.Combine(options.DataDirectory, "messages.ndjson"))
+    : new RabbitMqOutboxPublisher(rabbit);
 
-var published = await relay.PublishPendingAsync();
-Console.WriteLine($"Outbox publicado: {published} evento(s) en messages.ndjson.");
+var outboxStore = new SqliteOutboxStore(options.WarehouseDbPath);
+var relay = new OutboxRelay(outboxStore, publisher, TimeProvider.System);
+var destination = rabbit is null
+    ? "messages.ndjson"
+    : $"{rabbit.Exchange}/{rabbit.RoutingKey}";
 
-var secondPass = await relay.PublishPendingAsync();
-Console.WriteLine($"Outbox segunda pasada: {secondPass} evento(s) (idempotente).");
+try
+{
+    var published = await relay.RunOnceAsync();
+    Console.WriteLine($"Outbox publicado: {published} evento(s) en {destination}.");
+
+    var secondPass = await relay.RunOnceAsync();
+    Console.WriteLine($"Outbox segunda pasada: {secondPass} evento(s) (idempotente).");
+}
+finally
+{
+    if (publisher is IAsyncDisposable disposable)
+    {
+        await disposable.DisposeAsync();
+    }
+}
 
 var report = await host.GetReportAsync();
 Console.WriteLine();

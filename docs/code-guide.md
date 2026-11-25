@@ -168,6 +168,23 @@ The LegacyBridge sink writes an event in the same transaction as the batch.
 `OutboxRelay` publishes pending events and marks them processed. See
 `samples/LegacyBridge/README.md`.
 
+## Messaging consumer
+
+`LegacyBridge.Consumer` is a RabbitMQ consumer:
+
+- Durable topic exchange `pipeline.events`.
+- Durable queue `legacybridge.orders` bound to `orders.batch.loaded`.
+- Envelope: `{ id, type, payload, occurredAt }`.
+- `processed_messages` table in SQLite for idempotency.
+
+```bash
+docker compose up -d rabbitmq
+RABBITMQ_HOST=localhost dotnet run --project samples/LegacyBridge.Consumer -- --once
+```
+
+`--once` sets prefetch to one, processes a single message and exits. Without it
+the consumer runs until cancelled.
+
 ## Template
 
 ```bash

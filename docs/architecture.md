@@ -125,8 +125,15 @@ and batch id. Quarantine is evidence, not a silent truncation.
 
 The LegacyBridge sample writes an `orders.batch.loaded` event to an `outbox`
 table in the same transaction as the batch. `OutboxRelay` publishes pending
-events to an NDJSON file and marks them processed. Delivery is at-least-once;
-a second pass publishes zero.
+events and marks them processed.
+
+- Without `RABBITMQ_HOST`, events go to `messages.ndjson`.
+- With `RABBITMQ_HOST`, events go to a durable topic exchange and a durable
+  queue.
+
+`LegacyBridge.Consumer` consumes the queue, stores each message id in SQLite
+before acking and acks duplicates without reprocessing. Delivery is
+at-least-once; the inbox table provides idempotency.
 
 This is the anti-corruption boundary: future services consume events, not the
 legacy schema or the staging tables.

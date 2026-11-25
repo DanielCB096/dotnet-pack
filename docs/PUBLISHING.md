@@ -90,31 +90,39 @@ O desde el paquete local:
 dotnet new install artifacts/PipelineKit.Templates.0.5.0.nupkg
 ```
 
-## 7. Publicar en NuGet.org
+## 7. Publicar en NuGet.org con Trusted Publishing
 
-La publicación en NuGet.org es **manual** para no publicar por accidente cada
-etiqueta.
+La vía recomendada es **Trusted Publishing**: GitHub pide un token OIDC y NuGet
+devuelve una API key temporal. No hay secretos permanentes.
 
-1. Crea una API key en https://www.nuget.org/account/apikeys con permiso de push
-   para el prefijo `PipelineKit`.
-2. En GitHub, ve a **Settings → Secrets and variables → Actions** y crea el
-   secreto `NUGET_API_KEY`.
-3. Ejecuta el workflow **nuget-publish** desde **Actions → nuget-publish → Run
-   workflow**.
-4. Verifica los paquetes en https://www.nuget.org/packages/PipelineKit.Incremental
+1. En NuGet.org, entra a **Tu usuario → Trusted Publishing → New policy**.
+2. Rellena:
 
-También puedes publicar a mano:
+| Campo | Valor |
+|---|---|
+| Policy Name | `PipelineKit GitHub Actions` |
+| Package Owner | `Daniel_CB` |
+| CI/CD Provider | GitHub Actions |
+| Repository Owner | `DanielCB096` |
+| Repository | `dotnet-pack` |
+| Workflow File | `nuget-publish.yml` |
+| Environment | vacío |
 
-```powershell
-dotnet pack PipelineKit.slnx -c Release -o artifacts
+3. Scopes: marca **Push new packages and package versions**.
+4. Glob Patterns:
 
-dotnet nuget push "artifacts/*.nupkg" `
-  --api-key "TU_API_KEY" `
-  --source "https://api.nuget.org/v3/index.json" `
-  --skip-duplicate
+```text
+PipelineKit.*
 ```
 
-O con el script del repositorio, sin pegar la clave en el chat:
+5. Ejecuta **Actions → nuget-publish → Run workflow**.
+
+El workflow usa `NuGet/login@v1` y publica con la clave temporal. No necesitas
+crear el secreto `NUGET_API_KEY` para GitHub Actions.
+
+### Alternativa local con API key
+
+Si publicas desde tu máquina, la API key sigue funcionando:
 
 ```powershell
 $env:NUGET_API_KEY = "TU_API_KEY"

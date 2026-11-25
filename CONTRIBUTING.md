@@ -4,7 +4,7 @@ Thanks for taking a look at PipelineKit.
 
 ## Requirements
 
-- .NET SDK 10.0.400 or newer
+- .NET SDK 11.0.100 or newer
 - Docker (for RabbitMQ and the observability stack)
 
 ## Build and test

@@ -6,7 +6,7 @@ pipelines.
 ## Install
 
 ```bash
-dotnet add package PipelineKit.Telemetry --version 0.7.0
+dotnet add package PipelineKit.Telemetry --version 0.8.0
 ```
 
 ## Usage

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework></TargetFramework>
-    <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net11.0</TargetFrameworks>
     <IsPackable>true</IsPackable>
     <PackageId>PipelineKit.AgentProtocol</PackageId>
     <Description>Versioned JSON contract and process host for isolated x86 extraction agents.</Description>

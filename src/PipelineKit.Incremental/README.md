@@ -6,7 +6,7 @@ windows, row hashes and commit-after-success.
 ## Install
 
 ```bash
-dotnet add package PipelineKit.Incremental --version 0.7.0
+dotnet add package PipelineKit.Incremental --version 0.8.0
 ```
 
 ## What it solves

@@ -5,7 +5,7 @@ Test doubles and dirty-data helpers for PipelineKit.
 ## Install
 
 ```bash
-dotnet add package PipelineKit.Testing --version 0.7.0
+dotnet add package PipelineKit.Testing --version 0.8.0
 ```
 
 ## Included

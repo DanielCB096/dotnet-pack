@@ -296,3 +296,6 @@ Rellenar antes de cerrar el traspaso:
 | On-call / escalado | _pendiente_ |
 
 Mientras no se actualice, el propietario actual es `@DanielCB096`.
+
+El plan detallado para alinear el nombre del repositorio con el producto está en
+[rename-repo.md](rename-repo.md).

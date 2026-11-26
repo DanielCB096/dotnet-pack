@@ -27,4 +27,4 @@ The host writes `request.json`, starts the child, reads `progress.ndjson` and
 Targets `netstandard2.0` and `net11.0`, so it works with .NET Framework 4.8 x86
 and modern .NET x64.
 
-Docs: https://github.com/DanielCB096/dotnet-pack/blob/main/docs/architecture.md
+Docs: https://github.com/DanielCB096/pipelinekit/blob/main/docs/architecture.md

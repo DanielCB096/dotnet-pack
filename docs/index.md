@@ -19,9 +19,9 @@ pipelines.
 
 ## Repository
 
-- [README](https://github.com/DanielCB096/dotnet-pack/blob/main/README.md)
-- [LegacyBridge sample](https://github.com/DanielCB096/dotnet-pack/blob/main/samples/LegacyBridge/README.md)
-- [Observability stack](https://github.com/DanielCB096/dotnet-pack/blob/main/observability/README.md)
-- [Benchmarks](https://github.com/DanielCB096/dotnet-pack/blob/main/benchmarks/RESULTS.md)
-- [Job template](https://github.com/DanielCB096/dotnet-pack/blob/main/templates/pipelinekit-job/README.md)
+- [README](https://github.com/DanielCB096/pipelinekit/blob/main/README.md)
+- [LegacyBridge sample](https://github.com/DanielCB096/pipelinekit/blob/main/samples/LegacyBridge/README.md)
+- [Observability stack](https://github.com/DanielCB096/pipelinekit/blob/main/observability/README.md)
+- [Benchmarks](https://github.com/DanielCB096/pipelinekit/blob/main/benchmarks/RESULTS.md)
+- [Job template](https://github.com/DanielCB096/pipelinekit/blob/main/templates/pipelinekit-job/README.md)
 - [Plan de renombrado del repositorio](rename-repo.md)

@@ -27,4 +27,4 @@ var result = await runner.RunAsync(request, source, sink);
 Implement `IIncrementalSource` and `IBatchSink`. The checkpoint is committed only
 after the sink consumes the full batch.
 
-Docs: https://github.com/DanielCB096/dotnet-pack/blob/main/docs/incremental-runner.md
+Docs: https://github.com/DanielCB096/pipelinekit/blob/main/docs/incremental-runner.md

@@ -18,4 +18,4 @@ The generated project includes:
 
 Replace `DemoSource` and `DemoSink` with your real source and destination.
 
-Docs: https://github.com/DanielCB096/dotnet-pack/blob/main/templates/pipelinekit-job/README.md
+Docs: https://github.com/DanielCB096/pipelinekit/blob/main/templates/pipelinekit-job/README.md

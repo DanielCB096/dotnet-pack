@@ -22,4 +22,4 @@ var sink = new CollectingBatchSink();
 await runner.RunAsync(request, source, sink);
 ```
 
-Docs: https://github.com/DanielCB096/dotnet-pack
+Docs: https://github.com/DanielCB096/pipelinekit

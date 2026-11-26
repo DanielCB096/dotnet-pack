@@ -1,6 +1,6 @@
 # Documentation
 
-Online: https://danielcb096.github.io/dotnet-pack/
+Online: https://danielcb096.github.io/pipelinekit/
 
 | Document | Content |
 |---|---|
@@ -17,6 +17,6 @@ Online: https://danielcb096.github.io/dotnet-pack/
 
 ## Quick links
 
-- [Root README](https://github.com/DanielCB096/dotnet-pack/blob/main/README.md)
-- [LegacyBridge sample](https://github.com/DanielCB096/dotnet-pack/blob/main/samples/LegacyBridge/README.md)
-- [Job template](https://github.com/DanielCB096/dotnet-pack/blob/main/templates/pipelinekit-job/README.md)
+- [Root README](https://github.com/DanielCB096/pipelinekit/blob/main/README.md)
+- [LegacyBridge sample](https://github.com/DanielCB096/pipelinekit/blob/main/samples/LegacyBridge/README.md)
+- [Job template](https://github.com/DanielCB096/pipelinekit/blob/main/templates/pipelinekit-job/README.md)

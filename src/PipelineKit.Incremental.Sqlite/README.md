@@ -20,4 +20,4 @@ var runner = new IncrementalRunner(store);
 The store creates a `checkpoints` table keyed by pipeline, source, table and
 strategy. It is a good fit for a single-process job, a desktop app or a demo.
 
-Docs: https://github.com/DanielCB096/dotnet-pack
+Docs: https://github.com/DanielCB096/pipelinekit

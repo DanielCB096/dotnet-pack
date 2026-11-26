@@ -1,12 +1,12 @@
 # PipelineKit
 
-[![CI](https://github.com/DanielCB096/dotnet-pack/actions/workflows/ci.yml/badge.svg)](https://github.com/DanielCB096/dotnet-pack/actions/workflows/ci.yml)
+[![CI](https://github.com/DanielCB096/pipelinekit/actions/workflows/ci.yml/badge.svg)](https://github.com/DanielCB096/pipelinekit/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/PipelineKit.Incremental)](https://www.nuget.org/packages/PipelineKit.Incremental)
 [![Downloads](https://img.shields.io/nuget/dt/PipelineKit.Incremental)](https://www.nuget.org/packages/PipelineKit.Incremental)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![.NET 11](https://img.shields.io/badge/.NET-11-512BD4)](https://dotnet.microsoft.com)
-[![Tests](https://img.shields.io/badge/tests-65%2F65-brightgreen)](https://github.com/DanielCB096/dotnet-pack/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/badge/coverage-68.1%25-yellow)](https://github.com/DanielCB096/dotnet-pack/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-65%2F65-brightgreen)](https://github.com/DanielCB096/pipelinekit/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-68.1%25-yellow)](https://github.com/DanielCB096/pipelinekit/actions/workflows/ci.yml)
 
 Reusable .NET building blocks for **incremental, observable and testable data pipelines**.
 
@@ -198,7 +198,7 @@ Results: [benchmarks/RESULTS.md](benchmarks/RESULTS.md).
 
 ## Documentation
 
-Online: https://danielcb096.github.io/dotnet-pack/
+Online: https://danielcb096.github.io/pipelinekit/
 
 | Document | Content |
 |---|---|

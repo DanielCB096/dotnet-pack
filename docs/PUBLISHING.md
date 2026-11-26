@@ -21,7 +21,7 @@ No tienes que ejecutar `dotnet nuget push` a mano.
 
 ## 2. Ver los paquetes
 
-- Releases: https://github.com/DanielCB096/dotnet-pack/releases
+- Releases: https://github.com/DanielCB096/pipelinekit/releases
 - Paquetes: https://github.com/DanielCB096?tab=packages
 
 ## 3. Consumirlos desde otro proyecto
@@ -104,7 +104,7 @@ devuelve una API key temporal. No hay secretos permanentes.
 | Package Owner | `Daniel_CB` |
 | CI/CD Provider | GitHub Actions |
 | Repository Owner | `DanielCB096` |
-| Repository | `dotnet-pack` |
+| Repository | `pipelinekit` |
 | Workflow File | `nuget-publish.yml` |
 | Environment | vacío |
 

@@ -1,7 +1,8 @@
 # Plan: renombrar el repositorio a `pipelinekit`
 
-> **Estado:** propuesta. No ejecutar hasta que el equipo tenga acceso de
-> administración a GitHub y a la política de Trusted Publishing de NuGet.org.
+> **Estado:** ejecutado el 2026-11-26. Repositorio actual:
+> `DanielCB096/pipelinekit`. La política de Trusted Publishing no requirió
+> cambios porque NuGet valida el ID inmutable del repositorio.
 >
 > **Alcance:** solo cambia el nombre del repositorio. El producto, los paquetes y
 > el namespace siguen siendo `PipelineKit`.
@@ -26,10 +27,10 @@ y de la documentación; alinear el repositorio elimina esa contradicción.
 |---|---|
 | URL del repositorio y de las releases (GitHub redirige) | IDs de paquete y versiones |
 | URL de GitHub Pages (sin redirección automática) | Cuenta y propietario de NuGet |
-| Política de Trusted Publishing (incluye el nombre del repo) | Workflow `nuget-publish.yml` |
-| Badges y enlaces del README | Feed de GitHub Packages (`nuget.pkg.github.com/DanielCB096`) |
-| `RepositoryUrl` y `PackageProjectUrl` de los paquetes nuevos | Namespace y API pública |
-| URL de clones nuevos y remotos locales | Releases y tags existentes (redirigen) |
+| Badges y enlaces del README | Política de Trusted Publishing (valida el ID inmutable) |
+| `RepositoryUrl` y `PackageProjectUrl` de los paquetes nuevos | Workflow `nuget-publish.yml` |
+| URL de clones nuevos y remotos locales | Feed de GitHub Packages (`nuget.pkg.github.com/DanielCB096`) |
+| Nombre del repositorio en GitHub | Namespace, API pública, releases y tags (redirigen) |
 
 ## 3. Impacto y mitigación
 
@@ -37,7 +38,7 @@ y de la documentación; alinear el repositorio elimina esa contradicción.
 |---|---|---|
 | GitHub redirige el repo antiguo al nuevo | Bajo | No crear nunca un repo nuevo con el nombre `dotnet-pack`; rompería la redirección |
 | Pages cambia de URL y la antigua deja de servir | **Alto** | Decidir estrategia de URL antes de renombrar (sección 4) |
-| Trusted Publishing deja de autenticar | **Alto** | Actualizar la política inmediatamente después del rename y probar OIDC |
+| Trusted Publishing | **Bajo** | Valida el ID inmutable del repo (`#1470930886`); verificar OIDC con `nuget-publish` |
 | Enlaces en README/docs y badges | Medio | PR preparado de antemano; merge después del rename |
 | Metadatos de paquetes ya publicados | Bajo | Apuntan al repo antiguo, que redirige; se refrescan en la siguiente versión |
 | Remotos locales y forks | Bajo | `git remote set-url`; los forks pueden seguir el redirect |
@@ -72,7 +73,7 @@ opciones; elegir una antes de ejecutar:
 
 - [ ] Aprobación del equipo y ventana de 60 minutos sin releases.
 - [ ] Acceso de administración al repo de GitHub.
-- [ ] Acceso a la cuenta `Daniel_CB` en NuGet.org para editar Trusted Publishing.
+- [ ] Acceso a NuGet.org para verificar la política (no se edita si el ID no cambia).
 - [ ] Acceso a la configuración de Pages y al entorno `github-pages`.
 - [ ] Estrategia de URL de docs decidida (A, B o C).
 - [ ] PR con todos los enlaces actualizados, preparado pero **sin fusionar**.
@@ -118,24 +119,24 @@ opciones; elegir una antes de ejecutar:
 
    Debe responder con redirección al repo nuevo.
 
-### Fase 2 — Actualizar Trusted Publishing
+### Fase 2 — Verificar Trusted Publishing
 
 1. NuGet.org → cuenta `Daniel_CB` → **Trusted Publishing**.
-2. Editar la política existente:
-   - Repository owner: `DanielCB096`.
-   - Repository: `pipelinekit` (antes `dotnet-pack`).
-   - Workflow: `nuget-publish.yml`.
-   - Glob: `PipelineKit.*` (sin cambios).
-3. Guardar y esperar la propagación.
-4. Probar OIDC sin publicar una versión nueva:
+2. Abrir la política `PipelineKit GitHub Actions`.
+3. Comprobar que el **Repository ID** sigue siendo `#1470930886`. NuGet valida
+   por ID inmutable, no por nombre; el rename no invalida la política.
+4. El nombre mostrado puede seguir siendo `dotnet-pack` hasta que NuGet lo
+   refresque; es cosmético y no afecta a la publicación.
+5. No editar ni recrear la política salvo que el ID cambie.
+6. Probar OIDC sin publicar una versión nueva:
 
    ```bash
    gh workflow run nuget-publish.yml --ref main
    ```
 
    La versión `0.8.0` ya existe; `--skip-duplicate` hará que los pushes sean
-   duplicados, pero el login debe funcionar. Si el login falla, la política aún
-   apunta al repo antiguo.
+   duplicados, pero el login debe funcionar. Si el login falla, revisar que la
+   política siga activa y con el ID correcto.
 
 ### Fase 3 — Republicar la documentación
 
@@ -184,7 +185,7 @@ Si algo falla antes de comunicar el cambio:
 
 1. GitHub → Settings → renombrar de vuelta a `dotnet-pack`.
 2. Actualizar el remoto local a la URL original.
-3. Revertir la política de Trusted Publishing a `dotnet-pack`.
+3. La política de NuGet no cambia; si se recreó, restaurar el ID/nombre anterior.
 4. Relanzar `docs` y verificar la URL antigua.
 5. Cerrar o revertir el PR de enlaces.
 
@@ -198,7 +199,7 @@ GitHub mantiene la redirección del nombre anterior mientras no se reutilice.
 - [ ] PR de enlaces preparado y validado con DocFX.
 - [ ] Ventana anunciada.
 - [ ] Repo renombrado y remoto actualizado.
-- [ ] Política de NuGet actualizada y probada.
+- [ ] Política de NuGet verificada (ID sin cambios) y OIDC probado.
 - [ ] Docs republicadas en la URL nueva.
 - [ ] PR fusionado y CI en verde.
 - [ ] Metadatos, topics y homepage actualizados.

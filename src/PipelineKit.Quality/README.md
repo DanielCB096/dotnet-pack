@@ -28,4 +28,4 @@ Included rules:
 Also includes `SchemaDriftDetector` and `Reconciliation` helpers. Quarantine
 keeps the original value, rule, message and batch id.
 
-Docs: https://github.com/DanielCB096/dotnet-pack/blob/main/docs/architecture.md
+Docs: https://github.com/DanielCB096/pipelinekit/blob/main/docs/architecture.md

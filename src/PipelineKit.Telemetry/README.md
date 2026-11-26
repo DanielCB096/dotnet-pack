@@ -28,4 +28,4 @@ Names:
 
 Use `PipelineKit.Telemetry.OpenTelemetry` to register the source and meter.
 
-Docs: https://github.com/DanielCB096/dotnet-pack
+Docs: https://github.com/DanielCB096/pipelinekit

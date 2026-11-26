@@ -17,8 +17,8 @@
     <RepositoryType>git</RepositoryType>
     <Version>0.8.0</Version>
     <PackageTags>etl;data;pipeline;incremental;quality;telemetry;dotnet</PackageTags>
-    <PackageProjectUrl>https://github.com/DanielCB096/dotnet-pack</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/DanielCB096/dotnet-pack</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/DanielCB096/pipelinekit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DanielCB096/pipelinekit</RepositoryUrl>
   </PropertyGroup>
 
 </Project>

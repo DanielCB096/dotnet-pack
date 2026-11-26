@@ -24,8 +24,8 @@ Estado actual:
 | Cobertura | 68.1% líneas / 58.7% ramas (informativa) |
 | Mutación | 100% en Incremental (15/15) y Quality (56/56), gate `break: 80` |
 | Paquetes | 9 en NuGet.org como `0.8.0` |
-| Docs | https://danielcb096.github.io/dotnet-pack/ |
-| Release | https://github.com/DanielCB096/dotnet-pack/releases/tag/v0.8.0 |
+| Docs | https://danielcb096.github.io/pipelinekit/ |
+| Release | https://github.com/DanielCB096/pipelinekit/releases/tag/v0.8.0 |
 
 Lo que **no** está hecho todavía y condiciona el 1.0:
 
@@ -211,9 +211,9 @@ NuGet no permite reemplazar una versión: cualquier corrección es una versión 
 
 | Elemento | Detalle |
 |---|---|
-| GitHub | `DanielCB096/dotnet-pack`, rama `main` |
+| GitHub | `DanielCB096/pipelinekit`, rama `main` |
 | NuGet.org | cuenta `Daniel_CB`; los paquetes son `PipelineKit.*` |
-| Trusted Publishing | política para owner `Daniel_CB`, repo `DanielCB096/dotnet-pack`, workflow `nuget-publish.yml`, scope Push, glob `PipelineKit.*` |
+| Trusted Publishing | política para owner `Daniel_CB`, repo `DanielCB096/pipelinekit`, workflow `nuget-publish.yml`, scope Push, glob `PipelineKit.*`; valida el ID inmutable `#1470930886`, así que el rename no la invalida |
 | Variable de repo | `NUGET_USER` opcional; el workflow usa `Daniel_CB` por defecto |
 | Secretos de Actions | **ninguno** para NuGet; se usa OIDC (`id-token: write`) |
 | GitHub Pages | build type `workflow`; entorno `github-pages` restringido a `main` |

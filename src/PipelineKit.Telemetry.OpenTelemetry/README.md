@@ -29,4 +29,4 @@ builder.AddPipelineKitOpenTelemetry();
 Includes console exporters for local demos and OTLP exporters for a Collector.
 Set `OTEL_EXPORTER_OTLP_ENDPOINT` to choose the target.
 
-Docs: https://github.com/DanielCB096/dotnet-pack/blob/main/observability/README.md
+Docs: https://github.com/DanielCB096/pipelinekit/blob/main/observability/README.md

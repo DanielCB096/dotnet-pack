@@ -13,6 +13,8 @@
 
 ### Changed
 
+- Repository references updated to `pipelinekit`; package IDs, namespace and
+  NuGet feed are unchanged.
 - Refreshed the README test and coverage badges.
 - `scripts/publish-nuget.ps1` reads the version from `Directory.Build.props`
   instead of a hard-coded default.

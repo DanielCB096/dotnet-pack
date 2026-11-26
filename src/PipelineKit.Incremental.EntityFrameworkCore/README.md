@@ -29,4 +29,4 @@ var runner = new IncrementalRunner(store);
 `CommitAsync` retries once if a concurrent insert races on the same checkpoint
 key.
 
-Docs: https://github.com/DanielCB096/dotnet-pack
+Docs: https://github.com/DanielCB096/pipelinekit

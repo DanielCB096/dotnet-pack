@@ -8,3 +8,4 @@
 | [0004](0004-transactional-outbox.md) | Use a transactional outbox for batch events |
 | [0005](0005-trusted-publishing.md) | Use NuGet Trusted Publishing for GitHub Actions |
 | [0006](0006-observability-stack.md) | Use OpenTelemetry for batch pipelines |
+| [0007](0007-net11-baseline.md) | Target .NET 11 for the 0.8 line |

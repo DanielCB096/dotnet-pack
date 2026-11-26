@@ -1,5 +1,20 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Handover guide (`docs/handover.md`) with infrastructure, release runbook and
+  first-week checklist.
+- 1.0 roadmap (`docs/roadmap-1.0.md`) with API-freeze workstreams, open
+  decisions and release checklist.
+- ADR 0007 documenting the .NET 11 baseline.
+
+### Changed
+
+- `scripts/publish-nuget.ps1` reads the version from `Directory.Build.props`
+  instead of a hard-coded default.
+
 ## [0.8.0] - 2026-11-25
 
 ### Changed

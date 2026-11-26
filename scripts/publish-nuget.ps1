@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "0.5.0"
+    [string]$Version
 )
 
 $ErrorActionPreference = "Stop"
@@ -9,6 +9,12 @@ if ([string]::IsNullOrWhiteSpace($env:NUGET_API_KEY)) {
 }
 
 $root = Split-Path -Parent $PSScriptRoot
+
+if ([string]::IsNullOrWhiteSpace($Version)) {
+    [xml]$props = Get-Content (Join-Path $root "Directory.Build.props")
+    $Version = $props.Project.PropertyGroup.Version
+}
+
 Push-Location $root
 
 try {

@@ -213,7 +213,7 @@ NuGet no permite reemplazar una versión: cualquier corrección es una versión 
 |---|---|
 | GitHub | `DanielCB096/pipelinekit`, rama `main` |
 | NuGet.org | cuenta `Daniel_CB`; los paquetes son `PipelineKit.*` |
-| Trusted Publishing | política para owner `Daniel_CB`, repo `DanielCB096/pipelinekit`, workflow `nuget-publish.yml`, scope Push, glob `PipelineKit.*`; valida el ID inmutable `#1470930886`, así que el rename no la invalida |
+| Trusted Publishing | política `PipelineKit GitHub Actions pipelinekit` para owner `Daniel_CB`, repo `DanielCB096/pipelinekit`, workflow `nuget-publish.yml`, scope Push, glob `PipelineKit.*`; el nombre forma parte del match OIDC, así que un rename exige recrear la política |
 | Variable de repo | `NUGET_USER` opcional; el workflow usa `Daniel_CB` por defecto |
 | Secretos de Actions | **ninguno** para NuGet; se usa OIDC (`id-token: write`) |
 | GitHub Pages | build type `workflow`; entorno `github-pages` restringido a `main` |

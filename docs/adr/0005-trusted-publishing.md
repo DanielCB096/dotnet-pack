@@ -30,6 +30,8 @@ a developer machine.
 
 ## Addendum (2026-11-26)
 
-The repository was renamed from `dotnet-pack` to `pipelinekit`. NuGet Trusted
-Publishing validates the immutable GitHub repository ID (`#1470930886`), so the
-policy remained valid and no edit was required.
+The repository was renamed from `dotnet-pack` to `pipelinekit`. Although the
+immutable GitHub repository ID (`#1470930886`) did not change, NuGet's OIDC
+token exchange returned `401 No matching trust policy`: the repository name is
+also part of the match. A new policy was created for `pipelinekit`, validated
+with a duplicate-only `nuget-publish` run, and the old policy was deleted.

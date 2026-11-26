@@ -14,7 +14,8 @@
 ### Changed
 
 - Repository references updated to `pipelinekit`; package IDs, namespace and
-  NuGet feed are unchanged.
+  NuGet feed are unchanged. The Trusted Publishing policy was recreated for the
+  new name and validated with a duplicate-only `nuget-publish` run.
 - Refreshed the README test and coverage badges.
 - `scripts/publish-nuget.ps1` reads the version from `Directory.Build.props`
   instead of a hard-coded default.

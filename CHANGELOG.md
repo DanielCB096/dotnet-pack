@@ -9,9 +9,11 @@
 - 1.0 roadmap (`docs/roadmap-1.0.md`) with API-freeze workstreams, open
   decisions and release checklist.
 - ADR 0007 documenting the .NET 11 baseline.
+- Repository rename plan (`docs/rename-repo.md`) with impact, runbook and rollback.
 
 ### Changed
 
+- Refreshed the README test and coverage badges.
 - `scripts/publish-nuget.ps1` reads the version from `Directory.Build.props`
   instead of a hard-coded default.
 

@@ -24,3 +24,4 @@ pipelines.
 - [Observability stack](https://github.com/DanielCB096/dotnet-pack/blob/main/observability/README.md)
 - [Benchmarks](https://github.com/DanielCB096/dotnet-pack/blob/main/benchmarks/RESULTS.md)
 - [Job template](https://github.com/DanielCB096/dotnet-pack/blob/main/templates/pipelinekit-job/README.md)
+- [Plan de renombrado del repositorio](rename-repo.md)

@@ -11,6 +11,7 @@ Online: https://danielcb096.github.io/dotnet-pack/
 | [como-funciona.md](como-funciona.md) | Explicación completa en español, con analogías |
 | [incremental-runner.md](incremental-runner.md) | Deep dive del runner paso a paso |
 | [mutation-testing.md](mutation-testing.md) | Stryker.NET y resultados base |
+| [rename-repo.md](rename-repo.md) | Plan para renombrar el repositorio a `pipelinekit` |
 | [PUBLISHING.md](PUBLISHING.md) | Release process, GitHub Packages and template installation |
 | [adr/](adr/README.md) | Architecture decision records |
 

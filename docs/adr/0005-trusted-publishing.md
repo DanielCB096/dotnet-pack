@@ -27,3 +27,9 @@ a developer machine.
 - The workflow only works from the matching repository and workflow file.
 - A policy change in NuGet.org can block publishing until updated.
 - The manual trigger prevents accidental publishing on every tag.
+
+## Addendum (2026-11-26)
+
+The repository was renamed from `dotnet-pack` to `pipelinekit`. NuGet Trusted
+Publishing validates the immutable GitHub repository ID (`#1470930886`), so the
+policy remained valid and no edit was required.
